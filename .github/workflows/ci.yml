@@ -53,22 +53,22 @@ jobs:
           name: e2e-chromium-${{ matrix.preact }}-${{ matrix.http }}
           path: e2e/inertia/test-results
 
-  # Two workers: with three, Firefox is too slow on these runners, and timeouts fail tests of the React
-  # adapter as much as of this one (see docs/PLAN.md)
+  # Firefox and WebKit run one test at a time. Some tests race against fixed delays (a 75 ms hover delay, slow
+  # requests), which they lose on loaded runners, whatever the adapter (see docs/PLAN.md).
   e2e-firefox:
-    name: E2E (Firefox, shard ${{ matrix.shard }} of 3)
+    name: E2E (Firefox, shard ${{ matrix.shard }} of 5)
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        shard: [1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-e2e
         with:
           browser: firefox
-      - run: node scripts/e2e.mjs --skip-install --firefox --retries=2 --workers=2 --shard=${{ matrix.shard }}/3
+      - run: node scripts/e2e.mjs --skip-install --firefox --retries=2 --workers=1 --shard=${{ matrix.shard }}/5
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -89,7 +89,7 @@ jobs:
       - uses: ./.github/actions/setup-e2e
         with:
           browser: webkit
-      - run: node scripts/e2e.mjs --skip-install --webkit --retries=2 --workers=2 --shard=${{ matrix.shard }}/4
+      - run: node scripts/e2e.mjs --skip-install --webkit --retries=2 --workers=1 --shard=${{ matrix.shard }}/4
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
