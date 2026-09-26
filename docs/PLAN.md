@@ -65,7 +65,7 @@ docs/PLAN.md       本ドキュメント
 | 3 | その他の機能: `Deferred`・`WhenVisible`・`WhenMounted`・`InfiniteScroll`・`usePoll`・`usePrefetch` | ✅ |
 | 4 | test-app (Preact) と E2E ハーネス | ✅ |
 | 5 | 公式 E2E スイート (Chromium) の全件実行と修正 | ✅ |
-| 6 | SSR (公式 SSR E2E) と Vite プラグイン用設定 | ⬜ |
+| 6 | SSR (公式 SSR E2E) と Vite プラグイン用設定 | ✅ |
 | 7 | 単体テスト | ⬜ |
 | 8 | 追加検証 (axios クライアント、他ブラウザ、Preact 11) | ⬜ |
 | 9 | README・API ドキュメント・CI | ⬜ |
@@ -164,6 +164,14 @@ docs/PLAN.md       本ドキュメント
   ページ側でレイアウトエフェクトから `setTimeout` で記録するようにした。アダプタの挙動の問題ではない。
 - 最終結果: 全件を 3 回繰り返し実行して 3,597 件成功、失敗 0 (Chromium)。
   スキップ 72 件は、Vue / Svelte 専用テスト (1 回あたり 22 件) と下記の対象外 2 件の 3 回分。
+
+### フェーズ 6: SSR
+
+- 公式 SSR スイート (`SSR=true`、`tests/ssr.spec.ts`) を `node scripts/e2e.mjs --ssr` で実行。
+  SSR サーバー 2 つ (`ssr.tsx` による手動構成と、`@inertiajs/vite` の SSR 変換による自動構成) もハーネスが起動する。
+- 結果: 25 件成功、スキップ 2 件 (Svelte の async コンパイラ専用)。5 回繰り返しても失敗 0 (125 件成功)。
+  - ハイドレーション (レイアウト props・レイアウトコールバック・`WhenMounted`)、`<Head>` のタイトルのエスケープ、
+    サーバー提供のヘッド要素、`withApp`、Vite の SSR 自動変換 (`inertia-preact/vite` の framework 設定) を含む。
 
 ## スキップ・既知の差異
 
