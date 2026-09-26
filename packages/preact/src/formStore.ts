@@ -30,6 +30,16 @@ type PrecognitionValidationConfig<TKeys> = ValidationConfig & {
   only?: TKeys[] | Iterable<TKeys> | ArrayLike<TKeys>
 }
 
+export type SetDataByKeyValuePair<TForm> = <K extends FormDataKeys<TForm>>(
+  field: K,
+  value: FormDataValues<TForm, K>,
+) => void
+export type SetDataByObject<TForm> = (data: Partial<TForm>) => void
+export type SetDataByMethod<TForm> = (update: (data: TForm) => TForm) => void
+
+// An intersection rather than overloads, so a form can be passed where a form with compatible data is expected
+export type SetData<TForm> = SetDataByKeyValuePair<TForm> & SetDataByObject<TForm> & SetDataByMethod<TForm>
+
 /** The state and methods shared by `useForm()` and `useHttp()`. */
 export interface FormState<TForm extends object> {
   /** The current form data. */
@@ -47,11 +57,7 @@ export interface FormState<TForm extends object> {
    * Updates the data: a single field (dot notation for nested fields), several fields at once (merged into
    * the current data), or everything through a function of the current data.
    */
-  setData: {
-    <K extends FormDataKeys<TForm>>(field: K, value: FormDataValues<TForm, K>): void
-    (data: Partial<TForm>): void
-    (update: (data: TForm) => TForm): void
-  }
+  setData: SetData<TForm>
   /** Transforms the data before it is submitted (or validated). */
   transform: (callback: UseFormTransformCallback<TForm>) => void
   /** Sets the defaults to the current data, or updates some of them. */

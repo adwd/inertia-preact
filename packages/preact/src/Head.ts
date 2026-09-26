@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact'
-import { useContext, useEffect, useMemo } from 'preact/hooks'
+import { useContext, useLayoutEffect, useMemo } from 'preact/hooks'
 import { AppContext, PageContext } from './context'
 import { renderHeadElements } from './renderHead'
 
@@ -27,7 +27,10 @@ export default function Head({ title, children }: HeadProps) {
     provider.update(elements)
   }
 
-  useEffect(() => {
+  // A layout effect, so on a visit the new page's head is registered in the same commit that unregisters the
+  // old page's (on unmount). With an effect, which runs after paint, the head manager could briefly render
+  // the head without either.
+  useLayoutEffect(() => {
     provider.reconnect()
     provider.update(elements)
 

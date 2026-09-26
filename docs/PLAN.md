@@ -49,7 +49,7 @@ API の形は Preact の仕組みに合わせて決め、Preact に存在しな�
 ```
 packages/preact/   アダプタ本体 (npm パッケージ inertia-preact)
 test-app/          E2E 用のページ群 (Preact で記述)
-scripts/e2e.mjs    公式リポジトリを固定コミットで取得し、test-app とアダプタを組み込んで Playwright を実行する
+scripts/e2e.mjs    公式リポジトリを固定コミットで e2e/ に取得し、test-app とアダプタを組み込んで Playwright を実行する
 docs/PLAN.md       本ドキュメント
 ```
 
@@ -63,8 +63,8 @@ docs/PLAN.md       本ドキュメント
 | 1 | アダプタ基盤: `createInertiaApp`・`App`・ページ/レイアウト・`usePage`・`Head`・`Link`・SSR エントリ | ✅ |
 | 2 | フォーム: ストア・`useForm`・`<Form>`・Precognition・`useHttp`・`useRemember` | ✅ |
 | 3 | その他の機能: `Deferred`・`WhenVisible`・`WhenMounted`・`InfiniteScroll`・`usePoll`・`usePrefetch` | ✅ |
-| 4 | test-app (Preact) と E2E ハーネス | ⬜ |
-| 5 | 公式 E2E スイート (Chromium) の全件実行と修正 | ⬜ |
+| 4 | test-app (Preact) と E2E ハーネス | ✅ |
+| 5 | 公式 E2E スイート (Chromium) の全件実行と修正 | ✅ |
 | 6 | SSR (公式 SSR E2E) と Vite プラグイン用設定 | ⬜ |
 | 7 | 単体テスト | ⬜ |
 | 8 | 追加検証 (axios クライアント、他ブラウザ、Preact 11) | ⬜ |
@@ -131,6 +131,57 @@ docs/PLAN.md       本ドキュメント
   - `<WhenMounted>`: `AppContext` のハイドレーション状態を見て、SSR とハイドレーション中だけフォールバックを出す。
 - ビルドサイズ: `dist/index.js` 62 KB (未圧縮・未 minify)、gzip 15 KB。
 
+### フェーズ 4: test-app と E2E ハーネス
+
+- test-app: 公式 React test-app (約 430 ファイル) を出発点に、Preact の書き方に変換した。
+  - 機械的な変換: `react` → `preact` / `preact/hooks`、ネイティブ要素の `onChange` → `onInput`
+    (React の `onChange` は input イベント相当のため)、`e.target.value` → `e.currentTarget.value`、
+    `className` → `class`、`htmlFor` → `for`、React の型 (`React.MouseEvent` 等) → DOM / Preact の型。
+  - `<select defaultValue>` は Preact にないため、既定の `<option>` に `selected` を付けた。
+  - `memo()` を使うページは `shouldComponentUpdate` を持つクラスコンポーネントに書き換えた。
+  - `flushSync` を使うページ (InfiniteScroll のマウント直後のアンマウント) は、レイアウトエフェクトで
+    マウント直後の描画でアンマウントする形にした (Preact で可能な最短のサイクル)。
+  - `<Form>` / `<InfiniteScroll>` の `ref` を使うページは、クラスコンポーネントのインスタンスを受け取る形でそのまま動く。
+  - `preact/compat` のエイリアスは無効化 (`@preact/preset-vite` の `reactAliasesEnabled: false`)。
+- `scripts/e2e.mjs`: 公式リポジトリを固定コミットで `e2e/inertia` に取得し、`packages/react` をアダプタと test-app で置き換える。
+  - 取得先はドット始まりのディレクトリにしない (テストサーバーの Express が、パスにドットディレクトリを含む
+    ファイルを配信しないため。`.e2e` では全アセットが 404 になった)。
+  - テストサーバー (と SSR サーバー) はハーネスが起動・停止し、Playwright には既存サーバーを再利用させる。
+    Playwright に pnpm 経由で起動させると、終了時にサーバーを止められず Playwright が終了しなかったため。
+  - test-app のビルドもハーネスが行う (Playwright は既存サーバーを再利用するときビルドを省略するため)。
+  - 適用対象外のテストは `NOT_APPLICABLE` に理由付きで列挙し、`--grep-invert` で除外する。
+
+### フェーズ 5: 公式 E2E スイート (Chromium)
+
+- 初回: 1,199 件成功、2 件失敗。
+  - `<Head>` の遷移時の重複防止テスト: 戻る遷移で、一瞬 Inertia 管理の `<title>` が存在しない状態があった。
+    旧ページの `<Head>` はアンマウント (コミット中) に登録解除されるが、新ページの登録は `useEffect` (描画後) だったため。
+    `useLayoutEffect` に変更し、同じコミット内で入れ替わるようにした。
+  - React の `StrictMode` のテスト: 対象外として除外 (下記)。
+- フォームのイベント記録テストの不安定さ: テストページが `useEffect` で状態の変化を記録しており、Preact の
+  エフェクトは次のフレームの後に実行されるため、テストが記録を読む時点に間に合わないことがあった。
+  テストは「描画後のタスクで記録される」(React のエフェクトのタイミング) ことを前提にしているので、
+  ページ側でレイアウトエフェクトから `setTimeout` で記録するようにした。アダプタの挙動の問題ではない。
+- 最終結果: 全件を 3 回繰り返し実行して 3,597 件成功、失敗 0 (Chromium)。
+  スキップ 72 件は、Vue / Svelte 専用テスト (1 回あたり 22 件) と下記の対象外 2 件の 3 回分。
+
 ## スキップ・既知の差異
 
-(E2E 実行後に記載)
+### E2E で対象外として除外しているテスト
+
+| テスト | 理由 |
+| --- | --- |
+| `createInertiaApp it wraps the app in StrictMode when enabled` | React の `<StrictMode>` の機能。Preact には存在せず、`strictMode` オプションも提供しない |
+| `createInertiaApp it does not wrap the app in StrictMode by default` | 同上 |
+
+### React アダプタとの API の違い
+
+| 項目 | Preact アダプタ | 理由 |
+| --- | --- | --- |
+| `<Form>` / `<InfiniteScroll>` の `ref` | クラスコンポーネントのインスタンスを受け取る (API は同じ `FormComponentRef` / `InfiniteScrollRef`) | Preact でコンポーネントの命令的 API を公開する標準の方法 |
+| `<Link>` の `ref` | 受け付けない (Preact 11 では props として要素に渡る) | Preact 10 は関数コンポーネントに `ref` を渡さない |
+| `strictMode` オプション | なし | Preact に StrictMode がない |
+| `setData(object)` | 現在のデータにマージ | 型 (`Partial<TForm>`) と一致させた。Vue / Svelte と同じ |
+| `ResolvedComponent` / `InertiaFormProps` 型 | `PageComponent` / `InertiaForm` | 名前を内容に合わせた |
+| `<Head>` のテキスト子要素 | HTML エスケープする (`script` / `style` を除く) | `<title>{入力値}</title>` を安全にするため |
+| `useRemember` | 初期値に関数も渡せる | `useState` と同じ形にした |

@@ -8,5 +8,5 @@
   "sortImports": { "newlinesBetween": false },
   "endOfLine": "lf",
   "sortPackageJson": false,
-  "ignorePatterns": ["pnpm-lock.yaml", "*.md", ".e2e/**", "**/dist/**", "**/types/**"]
+  "ignorePatterns": ["pnpm-lock.yaml", "*.md", "e2e/**", "**/dist/**", "**/types/**"]
 }

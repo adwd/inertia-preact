@@ -8,7 +8,7 @@ export {
 } from './createInertiaApp'
 export { default as Deferred, type DeferredProps } from './Deferred'
 export { default as Form, type FormProps, useFormContext } from './Form'
-export type { FormState, FormValidation } from './formStore'
+export type { FormState, FormValidation, SetData } from './formStore'
 export { default as Head, type HeadProps } from './Head'
 export { default as InfiniteScroll, type InfiniteScrollProps } from './InfiniteScroll'
 export { resetLayoutProps, setLayoutProps } from './layoutProps'

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "types": ["vite/client", "multer"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "jsxImportSource": "preact",
+    "noImplicitOverride": true
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.jsx"]
+}

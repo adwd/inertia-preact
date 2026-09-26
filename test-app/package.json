@@ -1,0 +1,29 @@
+{
+  "name": "inertia-preact-test-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build .",
+    "build:ssr": "vite build --ssr ssr.tsx --outDir dist",
+    "build:ssr-auto": "vite build --config vite.config.ssr-auto.ts --ssr ssr-auto.tsx --outDir dist",
+    "lint": "oxlint .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.0",
+    "@inertiajs/core": "^3.7.1",
+    "@inertiajs/vite": "^3.7.1",
+    "@preact/preset-vite": "^2.10.6",
+    "es-toolkit": "^1.33.0",
+    "inertia-preact": "workspace:*",
+    "laravel-precognition": "^2.0.0",
+    "preact": "^10.29.8",
+    "preact-render-to-string": "^6.7.0"
+  },
+  "devDependencies": {
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.10.13",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16"
+  }
+}
