@@ -20,6 +20,7 @@ import {
   type VNode,
 } from 'preact'
 import { PageContext } from './context'
+import { InstanceRef, refProp } from './ref'
 
 /** A CSS selector or a ref to an element. */
 type ElementOption = string | RefObject<HTMLElement>
@@ -91,6 +92,7 @@ export default class InfiniteScroll
   private readonly items = createRef<HTMLElement>()
   private instance: UseInfiniteScrollProps | null = null
   private elements: ResolvedElements = { start: null, end: null, items: null }
+  private readonly instanceRef = new InstanceRef<this>(this)
 
   constructor(props: InfiniteScrollProps, page: Page | null) {
     super(props)
@@ -108,10 +110,13 @@ export default class InfiniteScroll
   }
 
   override componentDidMount(): void {
+    this.instanceRef.update(refProp(this.props))
     this.setUp()
   }
 
   override componentDidUpdate(previousProps: InfiniteScrollProps, previousState: InfiniteScrollState): void {
+    this.instanceRef.update(refProp(this.props))
+
     const elements = this.resolveElements()
 
     if (
@@ -135,6 +140,7 @@ export default class InfiniteScroll
   }
 
   override componentWillUnmount(): void {
+    this.instanceRef.clear()
     this.tearDown()
   }
 
@@ -166,8 +172,10 @@ export default class InfiniteScroll
       loading,
       params: _params,
       children,
+      // Preact 11 passes `ref` as a prop, it refers to this component (see componentDidMount())
+      ref: _ref,
       ...attributes
-    } = this.props
+    } = this.props as InfiniteScrollProps & { ref?: unknown }
 
     const { loadingPrevious, loadingNext, hasPrevious, hasNext } = this.state
     const autoLoad = this.autoLoads()

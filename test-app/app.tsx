@@ -1,3 +1,4 @@
+import 'virtual:test-tools'
 import type { HttpClient, HttpClientOptions, Page } from '@inertiajs/core'
 import { axiosAdapter, type VisitOptions } from '@inertiajs/core'
 import { createInertiaApp, router, type PageComponent } from 'inertia-preact'

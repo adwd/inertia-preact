@@ -28,6 +28,7 @@ import {
   type TargetedSubmitEvent,
 } from 'preact'
 import { useContext } from 'preact/hooks'
+import { InstanceRef, refProp } from './ref'
 import { InertiaFormStore } from './useForm'
 
 export type FormProps<TForm extends object = Record<string, any>> = FormComponentProps<TForm> &
@@ -67,6 +68,7 @@ export default class Form<TForm extends object = Record<string, any>>
   private readonly store: InertiaFormStore<Record<string, FormDataConvertible>>
   private defaultData = new FormData()
   private unsubscribe = noop
+  private readonly instanceRef = new InstanceRef<this>(this)
 
   constructor(props: FormProps<TForm>) {
     super(props)
@@ -82,6 +84,7 @@ export default class Form<TForm extends object = Record<string, any>>
   }
 
   override componentDidMount(): void {
+    this.instanceRef.update(refProp(this.props))
     this.defaultData = this.getFormData()
     this.store.setDefaults(this.getData())
     this.unsubscribe = this.store.subscribe(() => this.forceUpdate())
@@ -92,6 +95,8 @@ export default class Form<TForm extends object = Record<string, any>>
   }
 
   override componentDidUpdate(previousProps: FormProps<TForm>): void {
+    this.instanceRef.update(refProp(this.props))
+
     if (
       previousProps.validationTimeout !== this.props.validationTimeout ||
       previousProps.validateFiles !== this.props.validateFiles ||
@@ -102,6 +107,8 @@ export default class Form<TForm extends object = Record<string, any>>
   }
 
   override componentWillUnmount(): void {
+    this.instanceRef.clear()
+
     for (const event of ['input', 'change', 'reset']) {
       this.formElement.current?.removeEventListener(event, this.updateDirtyState)
     }
@@ -313,8 +320,10 @@ export default class Form<TForm extends object = Record<string, any>>
       component: _component,
       instant: _instant,
       children,
+      // Preact 11 passes `ref` as a prop, it refers to this component (see componentDidMount())
+      ref: _ref,
       ...attributes
-    } = this.props
+    } = this.props as FormProps<TForm> & { ref?: unknown }
 
     const form = this.slotProps()
 

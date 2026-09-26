@@ -7,13 +7,16 @@
  * The suite then runs with `PACKAGE=react`, so the test server serves the Preact test app, and the tests the
  * suite only runs for React run for Preact too.
  *
- * Usage: node scripts/e2e.mjs [--ssr] [--firefox | --webkit] [--skip-install] [playwright args...]
+ * Usage: node scripts/e2e.mjs [--ssr] [--debug] [--firefox | --webkit] [--skip-install] [playwright args...]
  *
  *   node scripts/e2e.mjs                        all tests, in Chromium
  *   node scripts/e2e.mjs tests/links.spec.ts    one spec
  *   node scripts/e2e.mjs --ssr                  the SSR tests
+ *   node scripts/e2e.mjs --debug                with preact/debug, reporting its warnings and errors
  *
- * Environment: INERTIA_REF (a commit to use instead of the pinned one), VITE_HTTP_CLIENT=axios (use axios).
+ * Environment: INERTIA_REF (a commit to use instead of the pinned one), VITE_HTTP_CLIENT=axios (use axios),
+ * PREACT_VERSION (a Preact version to use instead of the one in the lockfile, e.g. 11.0.0-rc.2),
+ * VITE_PREACT_COMPAT=true (run the test app with preact/compat, like an app using it).
  */
 import { execFileSync, spawn, spawnSync } from 'node:child_process'
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
@@ -50,6 +53,12 @@ function takeFlag(flag) {
 
 const ssr = takeFlag('--ssr')
 const skipInstall = takeFlag('--skip-install')
+const debug = takeFlag('--debug')
+
+if (debug) {
+  // Read when the test app is built, see test-app/tools
+  process.env.VITE_PREACT_DEBUG = 'true'
+}
 const browser = takeFlag('--firefox') ? 'firefox' : takeFlag('--webkit') ? 'webkit' : 'chromium'
 
 function run(command, commandArgs, options = {}) {
@@ -120,7 +129,14 @@ function replaceReactWithPreact() {
   useWorkspaceVersions(join(checkout, 'packages/react/test-app/package.json'), ['@inertiajs/core', '@inertiajs/vite'])
 
   const workspace = join(checkout, 'pnpm-workspace.yaml')
-  writeFileSync(workspace, readFileSync(workspace, 'utf8').replace(/^\s*- playgrounds\/\*\n/m, ''))
+  let workspaceConfig = readFileSync(workspace, 'utf8').replace(/^\s*- playgrounds\/\*\n/m, '')
+
+  if (process.env.PREACT_VERSION) {
+    // One Preact version for everything, including the dependencies of other packages
+    workspaceConfig = workspaceConfig.replace(/^overrides:\n/m, `overrides:\n  preact: ${process.env.PREACT_VERSION}\n`)
+  }
+
+  writeFileSync(workspace, workspaceConfig)
 }
 
 checkOutInertia()
@@ -195,10 +211,69 @@ if (ssr) {
 const projectArgs = args.some((arg) => arg.startsWith('--project')) ? [] : [`--project=${browser}`]
 const escape = (title) => title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const skipArgs = [`--grep-invert=${NOT_APPLICABLE.map((title) => `${escape(title)}$`).join('|')}`]
-const { status } = spawnSync('npx', ['playwright', 'test', ...projectArgs, ...skipArgs, ...args], {
+const debugArgs = debug ? [`--config=${writeDebugConfig()}`] : []
+
+// With --debug, Chromium writes the console to its log output, which Playwright passes on with DEBUG=pw:browser
+function writeDebugConfig() {
+  const path = join(checkout, 'playwright.preact-debug.config.ts')
+
+  writeFileSync(
+    path,
+    `import config from './playwright.config'
+
+export default {
+  ...config,
+  projects: config.projects.map((project) => ({
+    ...project,
+    use: { ...project.use, launchOptions: { args: ['--enable-logging=stderr', '--v=0'] } },
+  })),
+}
+`,
+  )
+
+  return path
+}
+
+const debugMessages = new Map()
+
+const playwright = spawn('npx', ['playwright', 'test', ...projectArgs, ...skipArgs, ...debugArgs, ...args], {
   cwd: checkout,
-  env,
-  stdio: 'inherit',
+  env: debug ? { ...env, DEBUG: 'pw:browser' } : env,
+  stdio: ['inherit', 'inherit', debug ? 'pipe' : 'inherit'],
 })
+
+if (debug) {
+  let buffer = ''
+
+  playwright.stderr.on('data', (chunk) => {
+    buffer += chunk
+    const lines = buffer.split('\n')
+    buffer = lines.pop()
+
+    for (const line of lines) {
+      const match = line.match(/\[preact-debug\] (\w+) (\S+) (\S+)/)
+
+      if (match) {
+        const key = `${match[1]}: ${decodeURIComponent(match[3])}`
+        const entry = debugMessages.get(key) ?? { count: 0, urls: new Set() }
+        entry.count++
+        entry.urls.add(match[2])
+        debugMessages.set(key, entry)
+      } else if (!line.includes('pw:browser')) {
+        process.stderr.write(`${line}\n`)
+      }
+    }
+  })
+}
+
+const status = await new Promise((resolve) => playwright.on('close', resolve))
+
+if (debug) {
+  console.log(`\npreact/debug reported ${debugMessages.size} distinct warning(s) or error(s)`)
+
+  debugMessages.forEach(({ count, urls }, message) =>
+    console.log(`\n[${count}x, on ${[...urls].slice(0, 5).join(' ')}${urls.size > 5 ? ' ...' : ''}]\n${message}`),
+  )
+}
 
 process.exit(status ?? 1)

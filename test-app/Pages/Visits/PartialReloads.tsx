@@ -1,5 +1,5 @@
 import { router, usePage } from 'inertia-preact'
-import { useEffect } from 'preact/hooks'
+import { useLayoutEffect } from 'preact/hooks'
 
 export default ({
   foo = 0,
@@ -14,7 +14,9 @@ export default ({
 }) => {
   const page = usePage()
 
-  useEffect(() => {
+  // A layout effect, so the data is published as soon as the page is rendered. Tests read it right after
+  // the URL changes, and Preact runs effects only after the next paint.
+  useLayoutEffect(() => {
     window._inertia_props = page.props
   }, [page.props])
 

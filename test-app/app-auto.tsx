@@ -1,3 +1,4 @@
+import 'virtual:test-tools'
 import { createInertiaApp, router } from 'inertia-preact'
 
 window.testing = { Inertia: router }

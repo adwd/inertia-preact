@@ -1,6 +1,6 @@
 import type { Method } from '@inertiajs/core'
 import { usePage } from 'inertia-preact'
-import { useEffect, useMemo } from 'preact/hooks'
+import { useMemo, useLayoutEffect } from 'preact/hooks'
 import type { MulterFile } from '../types'
 
 export default ({
@@ -33,7 +33,9 @@ export default ({
     [headers, method, form, files, query, url, page],
   )
 
-  useEffect(() => {
+  // A layout effect, so the data is published as soon as the page is rendered. Tests read it right after
+  // the URL changes, and Preact runs effects only after the next paint.
+  useLayoutEffect(() => {
     window._inertia_request_dump = dump
   }, [dump])
 

@@ -3,6 +3,7 @@ import inertia from '@inertiajs/vite'
 import preact from '@preact/preset-vite'
 import preactFramework from 'inertia-preact/vite'
 import { defineConfig } from 'vite'
+import testTools from './tools/vite'
 
 const isSSR = process.argv.includes('--ssr')
 
@@ -24,5 +25,5 @@ export default defineConfig({
     },
   },
   // No React aliases: neither the app nor the adapter may depend on preact/compat
-  plugins: [inertia({ frameworks: preactFramework }), preact({ reactAliasesEnabled: false })],
+  plugins: [inertia({ frameworks: preactFramework }), preact({ reactAliasesEnabled: false }), testTools()],
 })
