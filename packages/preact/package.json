@@ -1,0 +1,64 @@
+{
+  "name": "inertia-preact",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "The Preact adapter for Inertia.js",
+  "keywords": [
+    "inertia",
+    "inertiajs",
+    "preact",
+    "laravel"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adwd/inertia-preact.git",
+    "directory": "packages/preact"
+  },
+  "bugs": {
+    "url": "https://github.com/adwd/inertia-preact/issues"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./types/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./vite": {
+      "types": "./types/vite.d.ts",
+      "import": "./dist/vite.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist types && node build.js && tsc -p tsconfig.build.json",
+    "dev": "node build.js --watch",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "preact": "^10.27.2 || ^11.0.0-0"
+  },
+  "dependencies": {
+    "@inertiajs/core": "^3.7.1",
+    "es-toolkit": "^1.33.0",
+    "laravel-precognition": "^2.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "happy-dom": "^20.0.0",
+    "preact": "^10.29.8",
+    "preact-render-to-string": "^6.7.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.0"
+  }
+}
