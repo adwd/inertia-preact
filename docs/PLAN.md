@@ -62,7 +62,7 @@ docs/PLAN.md       本ドキュメント
 | 0 | リポジトリ初期化・計画 | ✅ |
 | 1 | アダプタ基盤: `createInertiaApp`・`App`・ページ/レイアウト・`usePage`・`Head`・`Link`・SSR エントリ | ✅ |
 | 2 | フォーム: ストア・`useForm`・`<Form>`・Precognition・`useHttp`・`useRemember` | ✅ |
-| 3 | その他の機能: `Deferred`・`WhenVisible`・`WhenMounted`・`InfiniteScroll`・`usePoll`・`usePrefetch` | ⬜ |
+| 3 | その他の機能: `Deferred`・`WhenVisible`・`WhenMounted`・`InfiniteScroll`・`usePoll`・`usePrefetch` | ✅ |
 | 4 | test-app (Preact) と E2E ハーネス | ⬜ |
 | 5 | 公式 E2E スイート (Chromium) の全件実行と修正 | ⬜ |
 | 6 | SSR (公式 SSR E2E) と Vite プラグイン用設定 | ⬜ |
@@ -117,6 +117,19 @@ docs/PLAN.md       本ドキュメント
 - `setData(object)` は現在のデータへのマージ (型の `Partial<TForm>` と一致。Vue / Svelte アダプタと同じ。React 版は置き換えだった)。
 - `useRemember(initialState, key)`: `useState` と同じ形。初期値に関数も渡せる。
 - 単体テスト: フォームストア 15 件、`useHttp` ストア 8 件を追加 (計 37 件)。
+
+### フェーズ 3: その他の機能
+
+- `<InfiniteScroll>` はクラスコンポーネント。インスタンスが core の `InfiniteScrollRef` (`fetchNext()` 等) を実装する。
+  - core の `useInfiniteScroll` のインスタンスはマウント時 (ブラウザのみ) に生成する。core はルーターのイベントリスナーを
+    登録するため、アンマウントのない SSR で生成するとリークする。SSR では初期状態をページの `scrollProps` から作る。
+  - トリガー要素が変わったとき (カスタム要素の差し替え等) と `data` が変わったときに作り直す。
+  - マウント時の自動読み込みの有効・無効は、履歴から復元されたリクエスト数で判定する (state の反映を待たない)。
+  - 並び替え (`reverse`) に備えて、描画する 3 要素に key を付けた。
+- `<Deferred>` / `<WhenVisible>` / `<WhenMounted>` / `usePoll` / `usePrefetch` はフック。
+  - `usePoll`: リクエストオプションは毎回最新の値を使う (React 版はオブジェクトを渡すとマウント時の値に固定されていた)。
+  - `<WhenMounted>`: `AppContext` のハイドレーション状態を見て、SSR とハイドレーション中だけフォールバックを出す。
+- ビルドサイズ: `dist/index.js` 62 KB (未圧縮・未 minify)、gzip 15 KB。
 
 ## スキップ・既知の差異
 
