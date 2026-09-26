@@ -218,6 +218,13 @@ docs/PLAN.md       本ドキュメント
 - Firefox / WebKit の E2E ジョブは上流の CI に合わせた構成: Firefox は Ubuntu で 3 分割、WebKit は
   Safari に近い macOS (`macos-15`) で 4 分割・2 ワーカー。共通の準備は `.github/actions/setup-e2e`。
   ローカルでは作業環境のサンドボックスが Firefox の起動を止めるため、両ブラウザは CI で検証する。
+- CI の初回実行で判明したこと:
+  - ハーネスの `--skip-install` がチェックアウトを戻す際に上流の lockfile も戻し、CI (`CI=true`) の pnpm が
+    ビルド前に止まっていた → 直前のインストールの lockfile を残すよう修正。
+  - WebKit (macOS、4 分割)・Chromium 全マトリクス・SSR は全件成功。
+  - Firefox は上流と同じ 3 ワーカーだと時間切れで失敗 (19 件、再試行ごとに失敗箇所が変わる)。同じ CI で
+    公式 React アダプタを上流の手順で流すと 12 件失敗し、同じ現象だった。2 ワーカーでは Preact は全件成功
+    (flaky 1 件) なので、Firefox ジョブは 2 ワーカーにした。
 - ハーネス: `--prepare` (取得・インストール・ビルドのみ。CI でブラウザを入れる前に使う) を追加。
   `--skip-install` でも test-app の `node_modules` を保持するようにした (以前は pnpm が実行前に自動で入れ直すことに依存していた)。
 - レビューでの修正: `App` の `swap()` / `setFlash()` はルーター用の内部メソッドなので `@internal` とし、公開型から除外 (`stripInternal`)。

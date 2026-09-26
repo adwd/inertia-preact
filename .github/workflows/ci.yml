@@ -53,6 +53,8 @@ jobs:
           name: e2e-chromium-${{ matrix.preact }}-${{ matrix.http }}
           path: e2e/inertia/test-results
 
+  # Two workers: with three, Firefox is too slow on these runners, and timeouts fail tests of the React
+  # adapter as much as of this one (see docs/PLAN.md)
   e2e-firefox:
     name: E2E (Firefox, shard ${{ matrix.shard }} of 3)
     runs-on: ubuntu-24.04
@@ -66,7 +68,7 @@ jobs:
       - uses: ./.github/actions/setup-e2e
         with:
           browser: firefox
-      - run: node scripts/e2e.mjs --skip-install --firefox --retries=2 --workers=3 --shard=${{ matrix.shard }}/3
+      - run: node scripts/e2e.mjs --skip-install --firefox --retries=2 --workers=2 --shard=${{ matrix.shard }}/3
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
