@@ -61,7 +61,7 @@ docs/PLAN.md       本ドキュメント
 | --- | --- | --- |
 | 0 | リポジトリ初期化・計画 | ✅ |
 | 1 | アダプタ基盤: `createInertiaApp`・`App`・ページ/レイアウト・`usePage`・`Head`・`Link`・SSR エントリ | ✅ |
-| 2 | フォーム: ストア・`useForm`・`<Form>`・Precognition・`useHttp`・`useRemember` | ⬜ |
+| 2 | フォーム: ストア・`useForm`・`<Form>`・Precognition・`useHttp`・`useRemember` | ✅ |
 | 3 | その他の機能: `Deferred`・`WhenVisible`・`WhenMounted`・`InfiniteScroll`・`usePoll`・`usePrefetch` | ⬜ |
 | 4 | test-app (Preact) と E2E ハーネス | ⬜ |
 | 5 | 公式 E2E スイート (Chromium) の全件実行と修正 | ⬜ |
@@ -99,6 +99,24 @@ docs/PLAN.md       本ドキュメント
 - `<Link>`: 関数コンポーネント。`ref` は受け付けない (Preact 10 では関数コンポーネントに `ref` が渡らないため)。
   Preact 11 では `ref` が props として渡るので、そのまま要素に展開される。
 - 単体テスト (vitest): ヘッドのシリアライズ 9 件、SSR (レイアウト各形式・タイトルコールバック・Vite 用描画関数) 5 件。
+
+### フェーズ 2: フォーム
+
+- `FormStore` (`src/formStore.ts`): Preact に依存しないフォームの状態クラス。`useForm` / `useHttp` / `<Form>` の共通基盤。
+  - 状態は不変更新 (変更のたびに新しい `data` / `errors`)。スナップショットは変更があったときだけ作り直すので、
+    子コンポーネントのメモ化も効く。メソッドはストアの生存期間中同一参照 (古いクロージャ問題が起きない)。
+  - 購読者への通知はマイクロタスクで 1 tick に 1 回にまとめる。
+  - `rememberKey` の履歴状態への保存は購読中 (マウント中) のみ行う。送信完了がページ遷移後になっても、
+    遷移先ページの履歴状態に書き込まない。
+  - Precognition のバリデータはストアごとに 1 つ。
+- `InertiaFormStore` (`useForm`) はルーター経由の visit、`HttpFormStore` (`useHttp`) は core の HTTP クライアントで送信する。
+- `useStore`: ストアをコンポーネントごとに 1 回生成して購読するフック (描画から購読までの間の変更も取りこぼさない)。
+- `<Form>` はクラスコンポーネント。インスタンスが core の `FormComponentRef` を実装しているので、
+  `ref` でそのまま `submit()` / `reset()` 等を呼べる。状態と操作は children 関数・`useFormContext()` にも渡す。
+  - dirty 判定はイベント時に同期的に計算 (React 版は `startTransition` で遅延させていたが、Preact の描画は元々バッチされる)。
+- `setData(object)` は現在のデータへのマージ (型の `Partial<TForm>` と一致。Vue / Svelte アダプタと同じ。React 版は置き換えだった)。
+- `useRemember(initialState, key)`: `useState` と同じ形。初期値に関数も渡せる。
+- 単体テスト: フォームストア 15 件、`useHttp` ストア 8 件を追加 (計 37 件)。
 
 ## スキップ・既知の差異
 
