@@ -87,9 +87,18 @@ function checkOutInertia() {
     run('git', ['-C', checkout, 'fetch', 'origin', ref])
   }
 
+  // With --skip-install, the lockfile written by the last install describes the installed dependencies. pnpm
+  // checks it before running scripts, and in CI fails when it doesn't match the workspace.
+  const lockfile = join(checkout, 'pnpm-lock.yaml')
+  const installedLockfile = skipInstall && existsSync(lockfile) ? readFileSync(lockfile, 'utf8') : undefined
+
   // Start from a pristine checkout. Ignored files (dependencies, builds) are kept to speed up reruns.
   git('checkout', '--force', '--detach', ref)
   git('clean', '-fd')
+
+  if (installedLockfile !== undefined) {
+    writeFileSync(lockfile, installedLockfile)
+  }
   console.log(`Inertia checkout at ${git('rev-parse', 'HEAD')}`)
 }
 
