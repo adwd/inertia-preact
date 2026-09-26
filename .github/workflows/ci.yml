@@ -24,40 +24,74 @@ jobs:
       - run: pnpm format:check
       - run: pnpm test
 
-  e2e:
-    name: E2E (${{ matrix.browser }}, Preact ${{ matrix.preact }}, ${{ matrix.http }})
+  # The harness runs Playwright without CI set, so --retries and --workers give the settings of the Inertia
+  # repository's CI: retries, since a few of its tests are timing sensitive (see docs/PLAN.md), and a core
+  # left for the test server.
+  e2e-chromium:
+    name: E2E (Chromium, Preact ${{ matrix.preact }}, ${{ matrix.http }})
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        browser: [chromium]
         preact: [lockfile, 10.27.2, 11.0.0-rc.2]
         http: [default]
         include:
-          - { browser: chromium, preact: lockfile, http: axios }
-          - { browser: firefox, preact: lockfile, http: default }
-          - { browser: webkit, preact: lockfile, http: default }
+          - { preact: lockfile, http: axios }
     env:
       PREACT_VERSION: ${{ matrix.preact != 'lockfile' && matrix.preact || '' }}
       VITE_HTTP_CLIENT: ${{ matrix.http }}
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: ./.github/actions/setup-e2e
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: node scripts/e2e.mjs --prepare
-      - run: npx playwright install --with-deps ${{ matrix.browser }}
-        working-directory: e2e/inertia
-      # Retries like the Inertia repository's CI, since a few of its tests are timing sensitive (see docs/PLAN.md)
-      - run: node scripts/e2e.mjs --skip-install --${{ matrix.browser }} --retries=2
+          browser: chromium
+      - run: node scripts/e2e.mjs --skip-install --retries=2 --workers=3
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-${{ matrix.browser }}-${{ matrix.preact }}-${{ matrix.http }}
+          name: e2e-chromium-${{ matrix.preact }}-${{ matrix.http }}
+          path: e2e/inertia/test-results
+
+  e2e-firefox:
+    name: E2E (Firefox, shard ${{ matrix.shard }} of 3)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup-e2e
+        with:
+          browser: firefox
+      - run: node scripts/e2e.mjs --skip-install --firefox --retries=2 --workers=3 --shard=${{ matrix.shard }}/3
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-firefox-${{ matrix.shard }}
+          path: e2e/inertia/test-results
+
+  # On macOS, like Safari, as in the Inertia repository
+  e2e-webkit:
+    name: E2E (WebKit, shard ${{ matrix.shard }} of 4)
+    runs-on: macos-15
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup-e2e
+        with:
+          browser: webkit
+      - run: node scripts/e2e.mjs --skip-install --webkit --retries=2 --workers=2 --shard=${{ matrix.shard }}/4
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-webkit-${{ matrix.shard }}
           path: e2e/inertia/test-results
 
   e2e-ssr:
@@ -72,16 +106,10 @@ jobs:
       PREACT_VERSION: ${{ matrix.preact != 'lockfile' && matrix.preact || '' }}
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: ./.github/actions/setup-e2e
         with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: node scripts/e2e.mjs --prepare
-      - run: npx playwright install --with-deps chromium
-        working-directory: e2e/inertia
-      - run: node scripts/e2e.mjs --skip-install --ssr --retries=2
+          browser: chromium
+      - run: node scripts/e2e.mjs --skip-install --ssr --retries=2 --workers=3
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

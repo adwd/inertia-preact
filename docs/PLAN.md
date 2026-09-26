@@ -212,9 +212,12 @@ docs/PLAN.md       本ドキュメント
 
 - `packages/preact/README.md`: インストール、セットアップ (Vite プラグイン・SSR を含む)、ページとレイアウト、API 一覧、
   ref の扱い、React アダプタとの違い、開発手順。ルートの `README.md` はリポジトリ構成と E2E ハーネスのオプション。
-- `.github/workflows/ci.yml`: ビルド・型・lint・フォーマット・単体テストのジョブと、E2E のマトリクス
-  (Chromium × Preact 10 (lockfile) / 10.27.2 / 11 RC、axios、Firefox、WebKit) と SSR。
-  E2E は上流の CI と同じく `--retries=2` (上記の不安定なテストのため)。ローカルでは Chromium 以外のブラウザは未検証。
+- `.github/workflows/ci.yml`: ビルド・型・lint・フォーマット・単体テストのジョブと、E2E
+  (Chromium × Preact 10 (lockfile) / 10.27.2 / 11 RC、axios) と SSR。
+  E2E は上流の CI と同じく `--retries=2` (上記の不安定なテストのため)。
+- Firefox / WebKit の E2E ジョブは上流の CI に合わせた構成: Firefox は Ubuntu で 3 分割、WebKit は
+  Safari に近い macOS (`macos-15`) で 4 分割・2 ワーカー。共通の準備は `.github/actions/setup-e2e`。
+  ローカルでは作業環境のサンドボックスが Firefox の起動を止めるため、両ブラウザは CI で検証する。
 - ハーネス: `--prepare` (取得・インストール・ビルドのみ。CI でブラウザを入れる前に使う) を追加。
   `--skip-install` でも test-app の `node_modules` を保持するようにした (以前は pnpm が実行前に自動で入れ直すことに依存していた)。
 - レビューでの修正: `App` の `swap()` / `setFlash()` はルーター用の内部メソッドなので `@internal` とし、公開型から除外 (`stripInternal`)。

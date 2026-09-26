@@ -1,0 +1,23 @@
+name: Set up the E2E suite
+description: Installs the dependencies, checks out and builds the Inertia test suite with this adapter, and installs a browser
+
+inputs:
+  browser:
+    description: The Playwright browser to install (chromium, firefox or webkit)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v5
+      with:
+        node-version: 24
+        cache: pnpm
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+    - run: node scripts/e2e.mjs --prepare
+      shell: bash
+    - run: npx playwright install --with-deps ${{ inputs.browser }}
+      shell: bash
+      working-directory: e2e/inertia
