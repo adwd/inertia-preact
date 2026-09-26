@@ -69,7 +69,7 @@ docs/PLAN.md       本ドキュメント
 | 7 | 単体テスト | ✅ |
 | 8 | 追加検証 (axios クライアント、preact/debug、Preact 11 / 最小対応バージョン、preact/compat 併用) | ✅ |
 | 9 | README・API ドキュメント・CI | ✅ |
-| 10 | 公開 (GitHub・npm・GitHub Packages) | 🚧 |
+| 10 | 公開 (GitHub・GitHub Packages) | 🚧 |
 
 ## 進捗ログ
 
@@ -244,12 +244,10 @@ docs/PLAN.md       本ドキュメント
 
 - リポジトリを GitHub (`adwd/inertia-preact`) で公開。説明文は「A Preact adapter for Inertia.js」
   (Preact アダプタは他にもあるため「The」としない)。
-- パッケージ名を `@adwd/inertia-preact` に変更。GitHub Packages の npm レジストリはオーナーのスコープ付きの
-  名前が必須で、npm でも同じ名前で公開する。
-- `.github/workflows/publish.yml`: バージョンタグ (`v0.1.0` など) の push で、ビルド・テストの後に npm
-  (provenance 付き) と GitHub Packages に公開する。公開済みのバージョンはレジストリごとに飛ばす。
-  npm は trusted publishing (OIDC) か `NPM_TOKEN` シークレット。trusted publishing は既存パッケージにしか
-  設定できないため、最初のバージョンは `NPM_TOKEN` で公開する。
+- パッケージ名を `@adwd/inertia-preact` に変更 (GitHub Packages の npm レジストリはオーナーのスコープ付きの
+  名前が必須)。
+- 公開先は GitHub Packages のみ (npm には公開しない)。`publishConfig.registry` で GitHub のレジストリに固定。
+- `.github/workflows/publish.yml`: バージョンタグ (`v0.1.0` など) の push で、ビルド・テストの後に公開する。
 
 ## 完了時点のまとめ
 

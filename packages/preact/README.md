@@ -11,15 +11,17 @@ The API follows the Inertia documentation for React where that fits Preact, and 
 
 ## Installation
 
-```bash
-npm install @adwd/inertia-preact preact
-```
-
-The package is also published to [GitHub Packages](https://github.com/adwd/inertia-preact/pkgs/npm/inertia-preact). Installing from there needs a [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope, even though the package is public, and this in the `.npmrc` of your project:
+The package is published to [GitHub Packages](https://github.com/adwd/inertia-preact/pkgs/npm/inertia-preact), not to npm. Installing from there needs a [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope, even though the package is public, and this in the `.npmrc` of your project:
 
 ```ini
 @adwd:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+With the token in the `GITHUB_TOKEN` environment variable:
+
+```bash
+npm install @adwd/inertia-preact preact
 ```
 
 For server-side rendering, also install `preact-render-to-string`.

@@ -1,10 +1,6 @@
 name: Publish
 
-# Publishes the adapter to GitHub Packages and npm when a version tag (e.g. v0.1.0) is pushed. A version
-# already in a registry is skipped there, so the workflow can be rerun, e.g. after a failure on npm.
-#
-# npm: with trusted publishing (configured on npmjs.com for this repository and workflow), or with an
-# NPM_TOKEN secret, e.g. for the first version, before the package exists on npm.
+# Publishes the adapter to GitHub Packages when a version tag (e.g. v0.1.0) is pushed
 on:
   push:
     tags: ['v*']
@@ -12,14 +8,10 @@ on:
 permissions:
   contents: read
   packages: write
-  id-token: write
-
-env:
-  PACKAGE: '@adwd/inertia-preact'
 
 jobs:
   publish:
-    name: Publish to GitHub Packages and npm
+    name: Publish to GitHub Packages
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -29,8 +21,6 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      # Trusted publishing needs npm 11.5.1 or later
-      - run: npm install --global npm@^11.5.1
       - run: pnpm install --frozen-lockfile
       - name: Check that the tag matches the package version
         run: |
@@ -39,34 +29,14 @@ jobs:
             echo "::error::The tag $GITHUB_REF_NAME doesn't match the package version $version"
             exit 1
           fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
       - run: pnpm build
       - run: pnpm test
-
-      - name: Publish to GitHub Packages
+      # The registry comes from publishConfig in the package.json
+      - name: Publish
         working-directory: packages/preact
         run: |
           echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" > "$NPM_CONFIG_USERCONFIG"
-          if npm view "$PACKAGE@$VERSION" version --registry "$REGISTRY" > /dev/null 2>&1; then
-            echo "$PACKAGE@$VERSION is already on GitHub Packages"
-          else
-            npm publish --registry "$REGISTRY"
-          fi
+          npm publish
         env:
-          REGISTRY: https://npm.pkg.github.com
-          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/github.npmrc
+          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/.npmrc
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to npm
-        working-directory: packages/preact
-        run: |
-          if npm view "$PACKAGE@$VERSION" version --registry "$REGISTRY" > /dev/null 2>&1; then
-            echo "$PACKAGE@$VERSION is already on npm"
-          else
-            echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > "$NPM_CONFIG_USERCONFIG"
-            npm publish --provenance --registry "$REGISTRY"
-          fi
-        env:
-          REGISTRY: https://registry.npmjs.org
-          NPM_CONFIG_USERCONFIG: ${{ runner.temp }}/npmjs.npmrc
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

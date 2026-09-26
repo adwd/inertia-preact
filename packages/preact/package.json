@@ -18,7 +18,7 @@
     "url": "https://github.com/adwd/inertia-preact/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",

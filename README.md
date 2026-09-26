@@ -48,7 +48,7 @@ Bump the version in `packages/preact/package.json`, commit, and push a tag named
 git tag v0.1.0 && git push origin v0.1.0
 ```
 
-The Publish workflow (`.github/workflows/publish.yml`) then builds, tests and publishes the package to npm, with provenance, and to GitHub Packages. It publishes to npm with [trusted publishing](https://docs.npmjs.com/trusted-publishers), configured on npmjs.com for this repository and `publish.yml`, or with an `NPM_TOKEN` repository secret (needed for the first version, since trusted publishing can only be configured for an existing package).
+The Publish workflow (`.github/workflows/publish.yml`) then builds, tests and publishes the package to GitHub Packages.
 
 ## License
 
