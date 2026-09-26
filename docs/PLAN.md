@@ -68,7 +68,7 @@ docs/PLAN.md       本ドキュメント
 | 6 | SSR (公式 SSR E2E) と Vite プラグイン用設定 | ✅ |
 | 7 | 単体テスト | ✅ |
 | 8 | 追加検証 (axios クライアント、preact/debug、Preact 11 / 最小対応バージョン、preact/compat 併用) | ✅ |
-| 9 | README・API ドキュメント・CI | ⬜ |
+| 9 | README・API ドキュメント・CI | ✅ |
 
 ## 進捗ログ
 
@@ -129,7 +129,7 @@ docs/PLAN.md       本ドキュメント
 - `<Deferred>` / `<WhenVisible>` / `<WhenMounted>` / `usePoll` / `usePrefetch` はフック。
   - `usePoll`: リクエストオプションは毎回最新の値を使う (React 版はオブジェクトを渡すとマウント時の値に固定されていた)。
   - `<WhenMounted>`: `AppContext` のハイドレーション状態を見て、SSR とハイドレーション中だけフォールバックを出す。
-- ビルドサイズ: `dist/index.js` 62 KB (未圧縮・未 minify)、gzip 15 KB。
+- ビルドサイズ: `dist/index.js` 62 KB (未圧縮・未 minify)、gzip 15 KB。minify + gzip では 11.0 KB (React アダプタは 10.6 KB。いずれも Preact / React と core を除く)。
 
 ### フェーズ 4: test-app と E2E ハーネス
 
@@ -207,6 +207,24 @@ docs/PLAN.md       本ドキュメント
   URL の変更直後に読むテストが負荷の高い状況で失敗した。core は URL を先に更新してからページを差し替える。
   React は `flushSync` で描画したときエフェクトも同期的に実行するので間に合うが、Preact のエフェクトは次の描画後に
   実行される。Preact で同等のタイミングになる `useLayoutEffect` にした。
+
+### フェーズ 9: ドキュメント・CI・最終レビュー
+
+- `packages/preact/README.md`: インストール、セットアップ (Vite プラグイン・SSR を含む)、ページとレイアウト、API 一覧、
+  ref の扱い、React アダプタとの違い、開発手順。ルートの `README.md` はリポジトリ構成と E2E ハーネスのオプション。
+- `.github/workflows/ci.yml`: ビルド・型・lint・フォーマット・単体テストのジョブと、E2E のマトリクス
+  (Chromium × Preact 10 (lockfile) / 10.27.2 / 11 RC、axios、Firefox、WebKit) と SSR。
+  E2E は上流の CI と同じく `--retries=2` (上記の不安定なテストのため)。ローカルでは Chromium 以外のブラウザは未検証。
+- ハーネス: `--prepare` (取得・インストール・ビルドのみ。CI でブラウザを入れる前に使う) を追加。
+  `--skip-install` でも test-app の `node_modules` を保持するようにした (以前は pnpm が実行前に自動で入れ直すことに依存していた)。
+- レビューでの修正: `App` の `swap()` / `setFlash()` はルーター用の内部メソッドなので `@internal` とし、公開型から除外 (`stripInternal`)。
+
+## 完了時点のまとめ
+
+- アダプタ本体 (`packages/preact/src`) 約 3,150 行。依存は `preact` (peer)、`@inertiajs/core`、`es-toolkit`、`laravel-precognition`。
+- 公式 E2E スイート (Chromium): 1,199 件成功 / 失敗 0。SSR スイート 25 件成功 / 失敗 0。
+  Preact 10.27.2 / 10.29.8 / 11.0.0-rc.2 のいずれでも同じ結果。対象外として除外したのは React の StrictMode のテスト 2 件のみ。
+- 単体テスト 50 件。`tsc` (strict)・oxlint・oxfmt はすべてクリーン。
 
 ## スキップ・既知の差異
 

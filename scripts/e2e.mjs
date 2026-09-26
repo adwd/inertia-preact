@@ -7,19 +7,20 @@
  * The suite then runs with `PACKAGE=react`, so the test server serves the Preact test app, and the tests the
  * suite only runs for React run for Preact too.
  *
- * Usage: node scripts/e2e.mjs [--ssr] [--debug] [--firefox | --webkit] [--skip-install] [playwright args...]
+ * Usage: node scripts/e2e.mjs [--ssr] [--debug] [--firefox | --webkit] [--prepare | --skip-install] [playwright args...]
  *
  *   node scripts/e2e.mjs                        all tests, in Chromium
  *   node scripts/e2e.mjs tests/links.spec.ts    one spec
  *   node scripts/e2e.mjs --ssr                  the SSR tests
  *   node scripts/e2e.mjs --debug                with preact/debug, reporting its warnings and errors
+ *   node scripts/e2e.mjs --prepare              only check out, install and build (e.g. to install browsers next)
  *
  * Environment: INERTIA_REF (a commit to use instead of the pinned one), VITE_HTTP_CLIENT=axios (use axios),
  * PREACT_VERSION (a Preact version to use instead of the one in the lockfile, e.g. 11.0.0-rc.2),
  * VITE_PREACT_COMPAT=true (run the test app with preact/compat, like an app using it).
  */
 import { execFileSync, spawn, spawnSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -53,6 +54,7 @@ function takeFlag(flag) {
 
 const ssr = takeFlag('--ssr')
 const skipInstall = takeFlag('--skip-install')
+const prepareOnly = takeFlag('--prepare')
 const debug = takeFlag('--debug')
 
 if (debug) {
@@ -111,6 +113,16 @@ function useWorkspaceVersions(packageJson, names) {
 }
 
 function replaceReactWithPreact() {
+  // The installed dependencies of the test app are kept, for --skip-install
+  const testAppModules = join(checkout, 'packages/react/test-app/node_modules')
+  const keptModules = join(checkout, '..', 'test-app-node_modules')
+
+  rmSync(keptModules, { recursive: true, force: true })
+
+  if (existsSync(testAppModules)) {
+    renameSync(testAppModules, keptModules)
+  }
+
   // Only core, the Vite plugin, the adapter with its test app, and the test server are needed
   for (const path of ['packages/react', 'packages/vue3', 'packages/svelte', 'playgrounds']) {
     rmSync(join(checkout, path), { recursive: true, force: true })
@@ -124,6 +136,10 @@ function replaceReactWithPreact() {
 
   copy('packages/preact', 'packages/preact')
   copy('test-app', 'packages/react/test-app')
+
+  if (existsSync(keptModules)) {
+    renameSync(keptModules, testAppModules)
+  }
 
   useWorkspaceVersions(join(checkout, 'packages/preact/package.json'), ['@inertiajs/core'])
   useWorkspaceVersions(join(checkout, 'packages/react/test-app/package.json'), ['@inertiajs/core', '@inertiajs/vite'])
@@ -148,6 +164,10 @@ if (!skipInstall) {
 }
 
 run('pnpm', ['-r', '--filter', './packages/{core,vite,preact}', 'build'], { cwd: checkout })
+
+if (prepareOnly) {
+  process.exit(0)
+}
 
 // Playwright builds the test app too, but not when it reuses a test server that is already running
 const testApp = ['--filter', './packages/react/test-app']

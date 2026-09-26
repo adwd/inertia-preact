@@ -7,6 +7,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "types",
-    "removeComments": false
+    "removeComments": false,
+    "stripInternal": true
   }
 }

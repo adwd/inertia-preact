@@ -1,0 +1,89 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Build, types, lint and unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm type-check
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm test
+
+  e2e:
+    name: E2E (${{ matrix.browser }}, Preact ${{ matrix.preact }}, ${{ matrix.http }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium]
+        preact: [lockfile, 10.27.2, 11.0.0-rc.2]
+        http: [default]
+        include:
+          - { browser: chromium, preact: lockfile, http: axios }
+          - { browser: firefox, preact: lockfile, http: default }
+          - { browser: webkit, preact: lockfile, http: default }
+    env:
+      PREACT_VERSION: ${{ matrix.preact != 'lockfile' && matrix.preact || '' }}
+      VITE_HTTP_CLIENT: ${{ matrix.http }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/e2e.mjs --prepare
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+        working-directory: e2e/inertia
+      # Retries like the Inertia repository's CI, since a few of its tests are timing sensitive (see docs/PLAN.md)
+      - run: node scripts/e2e.mjs --skip-install --${{ matrix.browser }} --retries=2
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ matrix.browser }}-${{ matrix.preact }}-${{ matrix.http }}
+          path: e2e/inertia/test-results
+
+  e2e-ssr:
+    name: E2E SSR (Preact ${{ matrix.preact }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        preact: [lockfile, 11.0.0-rc.2]
+    env:
+      PREACT_VERSION: ${{ matrix.preact != 'lockfile' && matrix.preact || '' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/e2e.mjs --prepare
+      - run: npx playwright install --with-deps chromium
+        working-directory: e2e/inertia
+      - run: node scripts/e2e.mjs --skip-install --ssr --retries=2
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-ssr-${{ matrix.preact }}
+          path: e2e/inertia/test-results

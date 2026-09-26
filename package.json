@@ -15,5 +15,6 @@
   "devDependencies": {
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0"
-  }
+  },
+  "packageManager": "pnpm@12.6.0"
 }

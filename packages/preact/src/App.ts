@@ -195,7 +195,7 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
 
     this.cleanups.push(layoutPropsStore.subscribe(() => this.forceUpdate()))
 
-    // Layout props are left out while hydrating so the markup matches the server's, so apply them now
+    // Layout props were left out while hydrating, for the markup to match the server's, so apply them now
     const { shared, named } = layoutPropsStore.get()
 
     if (wasHydrating && (Object.keys(shared).length > 0 || Object.keys(named).length > 0)) {
@@ -233,6 +233,8 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
   /**
    * Renders the given page. Resolves once the page is committed to the DOM: the router awaits this before
    * restoring scroll positions and firing events, and Preact calls `setState` callbacks after the commit.
+   *
+   * @internal Called by the router.
    */
   swap({ component, page, preserveState }: PageHandlerArgs): Promise<void> {
     if (!preserveState) {
@@ -250,6 +252,7 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
     })
   }
 
+  /** @internal Called by the router. */
   setFlash(flash: Page['flash']): void {
     this.setState(({ page }) => ({ page: { ...page, flash } }))
   }
