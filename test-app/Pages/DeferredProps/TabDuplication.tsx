@@ -1,4 +1,4 @@
-import { Deferred, usePage } from 'inertia-preact'
+import { Deferred, usePage } from '@adwd/inertia-preact'
 
 const Message = () => {
   const { message } = usePage<{ message?: string }>().props

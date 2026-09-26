@@ -1,6 +1,6 @@
+import preactFramework from '@adwd/inertia-preact/vite'
 import inertia from '@inertiajs/vite'
 import preact from '@preact/preset-vite'
-import preactFramework from 'inertia-preact/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({

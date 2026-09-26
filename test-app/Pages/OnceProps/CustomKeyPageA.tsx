@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 
 export default ({ userPermissions, bar }: { userPermissions: string; bar: string }) => {
   return (

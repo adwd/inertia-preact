@@ -1,4 +1,4 @@
-import { WhenVisible } from 'inertia-preact'
+import { WhenVisible } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 const Foo = ({ label }: { label: string }) => {

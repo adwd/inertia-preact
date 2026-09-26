@@ -1,4 +1,4 @@
-import { WhenVisible } from 'inertia-preact'
+import { WhenVisible } from '@adwd/inertia-preact'
 
 export default ({
   dataOnlyProp,

@@ -4,7 +4,7 @@
  *
  * ```js
  * import inertia from '@inertiajs/vite'
- * import preact from 'inertia-preact/vite'
+ * import preact from '@adwd/inertia-preact/vite'
  *
  * export default defineConfig({
  *   plugins: [inertia({ frameworks: preact })],
@@ -21,11 +21,11 @@ export interface FrameworkConfig {
 }
 
 const preact: FrameworkConfig = {
-  package: 'inertia-preact',
+  package: '@adwd/inertia-preact',
   extensions: ['.tsx', '.jsx'],
   extractDefault: true,
   ssr: (configureCall, options) => `
-import createServer from 'inertia-preact/server'
+import createServer from '@adwd/inertia-preact/server'
 import { renderToString } from 'preact-render-to-string'
 
 const renderPromise = ${configureCall}

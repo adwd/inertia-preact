@@ -1,4 +1,4 @@
-import { Link, router } from 'inertia-preact'
+import { Link, router } from '@adwd/inertia-preact'
 
 export default ({ foo, bar }: { foo?: string; bar: string }) => {
   return (

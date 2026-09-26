@@ -1,5 +1,5 @@
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import { useForm } from 'inertia-preact'
+import { useForm } from '@adwd/inertia-preact'
 import Child from './Child'
 
 export default function Parent() {

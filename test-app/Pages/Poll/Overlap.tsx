@@ -1,4 +1,4 @@
-import { usePoll } from 'inertia-preact'
+import { usePoll } from '@adwd/inertia-preact'
 
 export default ({ mode, time }: { mode: string; time: number }) => {
   const params = new URLSearchParams(window.location.search)

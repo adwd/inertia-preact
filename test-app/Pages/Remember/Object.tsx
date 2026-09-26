@@ -1,4 +1,4 @@
-import { Link, useRemember } from 'inertia-preact'
+import { Link, useRemember } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

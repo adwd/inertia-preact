@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 
 export default ({ page, timestamp }: { page: number; timestamp: number }) => {
   const prefetchPage2 = () => {

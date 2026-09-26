@@ -1,5 +1,5 @@
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import type { InertiaForm } from 'inertia-preact'
+import type { InertiaForm } from '@adwd/inertia-preact'
 
 interface ChildProps {
   form: InertiaForm<{

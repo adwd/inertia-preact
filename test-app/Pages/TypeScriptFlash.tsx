@@ -1,5 +1,5 @@
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import { router, usePage } from 'inertia-preact'
+import { router, usePage } from '@adwd/inertia-preact'
 
 declare module '@inertiajs/core' {
   export interface InertiaConfig {

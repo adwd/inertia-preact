@@ -1,4 +1,4 @@
-import { usePoll } from 'inertia-preact'
+import { usePoll } from '@adwd/inertia-preact'
 
 export default () => {
   const { start, stop, polling } = usePoll(

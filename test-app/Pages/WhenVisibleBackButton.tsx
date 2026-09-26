@@ -1,4 +1,4 @@
-import { Link, WhenVisible } from 'inertia-preact'
+import { Link, WhenVisible } from '@adwd/inertia-preact'
 
 export default ({
   lazyData,

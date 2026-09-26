@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 
 export default ({ navigatedTo }: { navigatedTo: boolean }) => (
   <div>

@@ -1,4 +1,4 @@
-import { Form } from 'inertia-preact'
+import { Form } from '@adwd/inertia-preact'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const transformData = (data: Record<string, any>) => {

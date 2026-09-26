@@ -1,4 +1,4 @@
-import { router, WhenVisible } from 'inertia-preact'
+import { router, WhenVisible } from '@adwd/inertia-preact'
 
 interface Props {
   lazyData?: {

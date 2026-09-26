@@ -1,4 +1,4 @@
-import { Head, Link } from 'inertia-preact'
+import { Head, Link } from '@adwd/inertia-preact'
 
 export default () => {
   return (

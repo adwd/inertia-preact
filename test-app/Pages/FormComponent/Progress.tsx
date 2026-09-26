@@ -1,4 +1,4 @@
-import { Form } from 'inertia-preact'
+import { Form } from '@adwd/inertia-preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
 export default () => {

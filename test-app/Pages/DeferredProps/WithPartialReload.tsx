@@ -1,4 +1,4 @@
-import { Deferred, Link, router, usePage } from 'inertia-preact'
+import { Deferred, Link, router, usePage } from '@adwd/inertia-preact'
 
 const WithPartialReload = ({ withOnly, withExcept }: { withOnly?: string[]; withExcept?: string[] }) => {
   const handleTriggerPartialReload = () => {

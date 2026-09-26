@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 
 export default ({ bar, foo }: { bar: number[]; foo: number[] }) => {
   const reloadIt = () => {

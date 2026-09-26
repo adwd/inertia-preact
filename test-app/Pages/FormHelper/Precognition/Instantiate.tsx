@@ -1,5 +1,5 @@
+import { useForm } from '@adwd/inertia-preact'
 import { Method, UrlMethodPair } from '@inertiajs/core'
-import { useForm } from 'inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

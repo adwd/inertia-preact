@@ -1,4 +1,4 @@
-import { InfiniteScroll, usePage } from 'inertia-preact'
+import { InfiniteScroll, usePage } from '@adwd/inertia-preact'
 import UserCard, { User } from './UserCard'
 
 export default ({ users }: { users: { data: User[] } }) => {

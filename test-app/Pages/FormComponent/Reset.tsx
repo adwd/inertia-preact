@@ -1,5 +1,5 @@
+import { Form } from '@adwd/inertia-preact'
 import { FormComponentRef } from '@inertiajs/core'
-import { Form } from 'inertia-preact'
 import { useRef } from 'preact/hooks'
 
 declare global {

@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 import type { ComponentChildren } from 'preact'
 import WithoutScrollRegion from '@/Layouts/WithoutScrollRegion.jsx'
 

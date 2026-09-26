@@ -1,5 +1,5 @@
+import { Link } from '@adwd/inertia-preact'
 import type { CacheForOption, LinkPrefetchOption, Method } from '@inertiajs/core'
-import { Link } from 'inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

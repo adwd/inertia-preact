@@ -1,5 +1,5 @@
+import { useForm } from '@adwd/inertia-preact'
 import { isEqual } from 'es-toolkit'
-import { useForm } from 'inertia-preact'
 
 export default () => {
   const form = useForm({

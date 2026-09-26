@@ -1,4 +1,4 @@
-import { config, Form } from 'inertia-preact'
+import { config, Form } from '@adwd/inertia-preact'
 
 export default () => {
   // Set global config for withAllErrors (no prop on the Form component)

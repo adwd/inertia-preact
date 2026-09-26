@@ -1,4 +1,4 @@
-import { setLayoutProps } from 'inertia-preact'
+import { setLayoutProps } from '@adwd/inertia-preact'
 import AppLayout from '../../Layouts/AppLayout'
 import ContentLayout from '../../Layouts/ContentLayout'
 

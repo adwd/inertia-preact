@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 import { useCallback, useEffect, useState } from 'preact/hooks'
 
 export default function Wayfinder() {

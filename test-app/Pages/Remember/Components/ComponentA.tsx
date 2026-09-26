@@ -1,4 +1,4 @@
-import { useRemember } from 'inertia-preact'
+import { useRemember } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default ({ ...props }) => {

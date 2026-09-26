@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 
 const prefetch = (url: string) => router.prefetch(url, { method: 'get' }, {})
 const instantVisit = (url: string) => router.visit(url, { component: 'OnceProps/InstantPageB' })

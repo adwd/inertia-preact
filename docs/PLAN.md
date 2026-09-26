@@ -1,6 +1,6 @@
 # Inertia.js Preact アダプタ 開発計画・進捗
 
-Preact 向けの Inertia.js アダプタ `inertia-preact` を新規に開発する。
+Preact 向けの Inertia.js アダプタ `@adwd/inertia-preact` を新規に開発する。
 
 - 参考: 公式 React アダプタ https://github.com/inertiajs/inertia/tree/3.x/packages/react
   (Vue / Svelte アダプタも挙動の比較対象として参照する)
@@ -47,7 +47,7 @@ API の形は Preact の仕組みに合わせて決め、Preact に存在しな�
 ## リポジトリ構成
 
 ```
-packages/preact/   アダプタ本体 (npm パッケージ inertia-preact)
+packages/preact/   アダプタ本体 (パッケージ @adwd/inertia-preact)
 test-app/          E2E 用のページ群 (Preact で記述)
 scripts/e2e.mjs    公式リポジトリを固定コミットで e2e/ に取得し、test-app とアダプタを組み込んで Playwright を実行する
 docs/PLAN.md       本ドキュメント
@@ -69,6 +69,7 @@ docs/PLAN.md       本ドキュメント
 | 7 | 単体テスト | ✅ |
 | 8 | 追加検証 (axios クライアント、preact/debug、Preact 11 / 最小対応バージョン、preact/compat 併用) | ✅ |
 | 9 | README・API ドキュメント・CI | ✅ |
+| 10 | 公開 (GitHub・npm・GitHub Packages) | 🚧 |
 
 ## 進捗ログ
 
@@ -171,7 +172,7 @@ docs/PLAN.md       本ドキュメント
   SSR サーバー 2 つ (`ssr.tsx` による手動構成と、`@inertiajs/vite` の SSR 変換による自動構成) もハーネスが起動する。
 - 結果: 25 件成功、スキップ 2 件 (Svelte の async コンパイラ専用)。5 回繰り返しても失敗 0 (125 件成功)。
   - ハイドレーション (レイアウト props・レイアウトコールバック・`WhenMounted`)、`<Head>` のタイトルのエスケープ、
-    サーバー提供のヘッド要素、`withApp`、Vite の SSR 自動変換 (`inertia-preact/vite` の framework 設定) を含む。
+    サーバー提供のヘッド要素、`withApp`、Vite の SSR 自動変換 (`@adwd/inertia-preact/vite` の framework 設定) を含む。
 
 ### フェーズ 7: 単体テスト
 
@@ -238,6 +239,17 @@ docs/PLAN.md       本ドキュメント
 - ハーネス: `--prepare` (取得・インストール・ビルドのみ。CI でブラウザを入れる前に使う) を追加。
   `--skip-install` でも test-app の `node_modules` を保持するようにした (以前は pnpm が実行前に自動で入れ直すことに依存していた)。
 - レビューでの修正: `App` の `swap()` / `setFlash()` はルーター用の内部メソッドなので `@internal` とし、公開型から除外 (`stripInternal`)。
+
+### フェーズ 10: 公開
+
+- リポジトリを GitHub (`adwd/inertia-preact`) で公開。説明文は「A Preact adapter for Inertia.js」
+  (Preact アダプタは他にもあるため「The」としない)。
+- パッケージ名を `@adwd/inertia-preact` に変更。GitHub Packages の npm レジストリはオーナーのスコープ付きの
+  名前が必須で、npm でも同じ名前で公開する。
+- `.github/workflows/publish.yml`: バージョンタグ (`v0.1.0` など) の push で、ビルド・テストの後に npm
+  (provenance 付き) と GitHub Packages に公開する。公開済みのバージョンはレジストリごとに飛ばす。
+  npm は trusted publishing (OIDC) か `NPM_TOKEN` シークレット。trusted publishing は既存パッケージにしか
+  設定できないため、最初のバージョンは `NPM_TOKEN` で公開する。
 
 ## 完了時点のまとめ
 

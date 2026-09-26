@@ -1,6 +1,6 @@
+import type { InertiaForm } from '@adwd/inertia-preact'
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
 import type { FormDataConvertible } from '@inertiajs/core'
-import type { InertiaForm } from 'inertia-preact'
 
 interface GenericProps<TFormData extends Record<string, FormDataConvertible>> {
   form: InertiaForm<TFormData>

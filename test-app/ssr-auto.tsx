@@ -1,4 +1,4 @@
-import { createInertiaApp, type PageComponent } from 'inertia-preact'
+import { createInertiaApp, type PageComponent } from '@adwd/inertia-preact'
 import { createElement } from 'preact'
 import { WithAppContext } from './Pages/SSR/WithApp'
 

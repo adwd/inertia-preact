@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 import { useEffect } from 'preact/hooks'
 
 export default (props: { name: string }) => {

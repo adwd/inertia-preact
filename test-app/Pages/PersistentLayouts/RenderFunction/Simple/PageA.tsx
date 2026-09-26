@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 import type { ComponentChildren } from 'preact'
 import SiteLayout from '@/Layouts/SiteLayout'
 

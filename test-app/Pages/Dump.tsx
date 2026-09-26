@@ -1,5 +1,5 @@
+import { usePage } from '@adwd/inertia-preact'
 import type { Method } from '@inertiajs/core'
-import { usePage } from 'inertia-preact'
 import { useMemo, useLayoutEffect } from 'preact/hooks'
 import type { MulterFile } from '../types'
 

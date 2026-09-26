@@ -1,5 +1,5 @@
 // This file is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import { type PageComponent, createInertiaApp } from 'inertia-preact'
+import { type PageComponent, createInertiaApp } from '@adwd/inertia-preact'
 
 declare module '@inertiajs/core' {
   export interface InertiaConfig {

@@ -1,5 +1,5 @@
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import { resetLayoutProps, setLayoutProps } from 'inertia-preact'
+import { resetLayoutProps, setLayoutProps } from '@adwd/inertia-preact'
 
 declare module '@inertiajs/core' {
   export interface InertiaConfig {

@@ -1,5 +1,5 @@
-import { createInertiaApp, type PageComponent } from 'inertia-preact'
-import createServer from 'inertia-preact/server'
+import { createInertiaApp, type PageComponent } from '@adwd/inertia-preact'
+import createServer from '@adwd/inertia-preact/server'
 import { renderToString } from 'preact-render-to-string'
 
 createServer((page) =>

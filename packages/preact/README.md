@@ -1,6 +1,6 @@
-# inertia-preact
+# @adwd/inertia-preact
 
-The [Preact](https://preactjs.com) adapter for [Inertia.js](https://inertiajs.com) 3.
+A [Preact](https://preactjs.com) adapter for [Inertia.js](https://inertiajs.com) 3.
 
 It builds on `@inertiajs/core`, like the official adapters, and offers the same features: pages and persistent layouts, links and visits, forms with Precognition, `useHttp`, partial reloads, deferred props, polling, prefetching, infinite scrolling, head management and server-side rendering.
 
@@ -12,7 +12,14 @@ The API follows the Inertia documentation for React where that fits Preact, and 
 ## Installation
 
 ```bash
-npm install inertia-preact preact
+npm install @adwd/inertia-preact preact
+```
+
+The package is also published to [GitHub Packages](https://github.com/adwd/inertia-preact/pkgs/npm/inertia-preact). Installing from there needs a [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope, even though the package is public, and this in the `.npmrc` of your project:
+
+```ini
+@adwd:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
 For server-side rendering, also install `preact-render-to-string`.
@@ -21,7 +28,7 @@ For server-side rendering, also install `preact-render-to-string`.
 
 ```tsx
 // app.tsx
-import { createInertiaApp } from 'inertia-preact'
+import { createInertiaApp } from '@adwd/inertia-preact'
 
 createInertiaApp({
   resolve: (name) => {
@@ -67,7 +74,7 @@ The `@inertiajs/vite` plugin knows the official adapters. Register the Preact on
 // vite.config.ts
 import inertia from '@inertiajs/vite'
 import preact from '@preact/preset-vite'
-import inertiaPreact from 'inertia-preact/vite'
+import inertiaPreact from '@adwd/inertia-preact/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
@@ -88,8 +95,8 @@ Without it, render the page yourself:
 
 ```tsx
 // ssr.tsx
-import { createInertiaApp } from 'inertia-preact'
-import createServer from 'inertia-preact/server'
+import { createInertiaApp } from '@adwd/inertia-preact'
+import createServer from '@adwd/inertia-preact/server'
 import { renderToString } from 'preact-render-to-string'
 
 createServer((page) =>
@@ -165,7 +172,7 @@ const form = useRef<Form>(null)
 
 ## Differences from the React adapter
 
-| | `inertia-preact` | `@inertiajs/react` |
+| | `@adwd/inertia-preact` | `@inertiajs/react` |
 | --- | --- | --- |
 | Refs of `<Form>` / `<InfiniteScroll>` | The component instance (same API) | `forwardRef` / `useImperativeHandle` |
 | Ref of `<Link>` | Not supported on Preact 10, which doesn't pass `ref` to function components (on Preact 11, it is passed to the element) | Forwarded to the element |

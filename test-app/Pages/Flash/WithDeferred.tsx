@@ -1,4 +1,4 @@
-import { Deferred, router, usePage } from 'inertia-preact'
+import { Deferred, router, usePage } from '@adwd/inertia-preact'
 import { useRef, useState } from 'preact/hooks'
 
 export default ({ data }: { data?: string }) => {

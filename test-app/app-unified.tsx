@@ -1,6 +1,6 @@
 import 'virtual:test-tools'
+import { createInertiaApp, type PageComponent, router } from '@adwd/inertia-preact'
 import type { VisitOptions } from '@inertiajs/core'
-import { createInertiaApp, type PageComponent, router } from 'inertia-preact'
 import { createElement } from 'preact'
 import { WithAppContext } from './Pages/SSR/WithApp'
 

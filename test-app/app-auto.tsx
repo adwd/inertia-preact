@@ -1,5 +1,5 @@
 import 'virtual:test-tools'
-import { createInertiaApp, router } from 'inertia-preact'
+import { createInertiaApp, router } from '@adwd/inertia-preact'
 
 window.testing = { Inertia: router }
 

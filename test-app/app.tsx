@@ -1,7 +1,7 @@
 import 'virtual:test-tools'
+import { createInertiaApp, router, type PageComponent } from '@adwd/inertia-preact'
 import type { HttpClient, HttpClientOptions, Page } from '@inertiajs/core'
 import { axiosAdapter, type VisitOptions } from '@inertiajs/core'
-import { createInertiaApp, router, type PageComponent } from 'inertia-preact'
 import { hydrate, render } from 'preact'
 import type { ComponentChildren } from 'preact'
 import AppLayout from './Layouts/AppLayout'

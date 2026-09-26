@@ -1,4 +1,4 @@
-import { usePage } from 'inertia-preact'
+import { usePage } from '@adwd/inertia-preact'
 import type { ComponentChildren } from 'preact'
 import { useId, useState } from 'preact/hooks'
 

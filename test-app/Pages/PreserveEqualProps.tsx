@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 import { useEffect, useState } from 'preact/hooks'
 
 export default ({ nestedA, nestedB }: { nestedA: { count: number }; nestedB: { date: number } }) => {

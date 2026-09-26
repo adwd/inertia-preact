@@ -1,4 +1,4 @@
-import { Deferred, Link, usePage } from 'inertia-preact'
+import { Deferred, Link, usePage } from '@adwd/inertia-preact'
 
 const FastProp = () => {
   const { fastProp } = usePage<{ fastProp?: string }>().props

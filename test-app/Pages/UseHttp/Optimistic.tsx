@@ -1,4 +1,4 @@
-import { useHttp } from 'inertia-preact'
+import { useHttp } from '@adwd/inertia-preact'
 
 export default () => {
   const optimisticForm = useHttp<{ name: string }, { success: boolean; id: number; name: string }>({

@@ -1,4 +1,4 @@
-import { usePage } from 'inertia-preact'
+import { usePage } from '@adwd/inertia-preact'
 
 export default () => {
   const page = usePage()

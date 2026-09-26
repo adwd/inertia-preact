@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 
 export default () => {
   const linkData = { file: new File([], 'example.jpg'), foo: 'bar' }

@@ -1,4 +1,4 @@
-import { Head } from 'inertia-preact'
+import { Head } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

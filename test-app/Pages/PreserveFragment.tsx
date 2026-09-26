@@ -1,4 +1,4 @@
-import { Link, router, usePage } from 'inertia-preact'
+import { Link, router, usePage } from '@adwd/inertia-preact'
 
 export default () => {
   const page = usePage()

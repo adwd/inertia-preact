@@ -1,4 +1,4 @@
-import { useForm, usePage } from 'inertia-preact'
+import { useForm, usePage } from '@adwd/inertia-preact'
 
 export default () => {
   const form = useForm({

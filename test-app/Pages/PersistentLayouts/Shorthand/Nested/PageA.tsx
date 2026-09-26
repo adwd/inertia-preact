@@ -1,4 +1,4 @@
-import { Link, usePage } from 'inertia-preact'
+import { Link, usePage } from '@adwd/inertia-preact'
 import type { ComponentChildren } from 'preact'
 import NestedLayout from '@/Layouts/NestedLayout.jsx'
 import SiteLayout from '@/Layouts/SiteLayout.jsx'

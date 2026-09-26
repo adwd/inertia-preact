@@ -1,4 +1,4 @@
-import { Link, usePage } from 'inertia-preact'
+import { Link, usePage } from '@adwd/inertia-preact'
 import FnSiteLayout from '@/Layouts/FnSiteLayout'
 
 const PageA = () => {

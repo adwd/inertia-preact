@@ -1,4 +1,4 @@
-import { WhenVisible, usePage } from 'inertia-preact'
+import { WhenVisible, usePage } from '@adwd/inertia-preact'
 
 const Visitors = () => {
   const { stats } = usePage<{ stats?: { visitors: number } }>().props

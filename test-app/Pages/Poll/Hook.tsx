@@ -1,4 +1,4 @@
-import { Link, usePoll } from 'inertia-preact'
+import { Link, usePoll } from '@adwd/inertia-preact'
 
 export default () => {
   usePoll(500, {

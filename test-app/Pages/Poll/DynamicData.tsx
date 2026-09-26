@@ -1,4 +1,4 @@
-import { Link, router, usePoll } from 'inertia-preact'
+import { Link, router, usePoll } from '@adwd/inertia-preact'
 
 export default ({ counter, last_received }: { counter: number; last_received: number | null }) => {
   usePoll(300, () => ({

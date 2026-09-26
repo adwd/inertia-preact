@@ -1,4 +1,4 @@
-import { InfiniteScroll } from 'inertia-preact'
+import { InfiniteScroll } from '@adwd/inertia-preact'
 import { useMemo } from 'preact/hooks'
 
 export default ({ users }: { users: { data: { id: number; name: string }[] } }) => {

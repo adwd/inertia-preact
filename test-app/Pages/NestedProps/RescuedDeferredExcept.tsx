@@ -1,4 +1,4 @@
-import { Deferred, router, usePage } from 'inertia-preact'
+import { Deferred, router, usePage } from '@adwd/inertia-preact'
 
 export default () => {
   const { auth, status } = usePage<{

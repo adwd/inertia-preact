@@ -1,5 +1,5 @@
 // This component is used for checking the TypeScript implementation; there is no Playwright test depending on it.
-import type { LayoutCallback } from 'inertia-preact'
+import type { LayoutCallback } from '@adwd/inertia-preact'
 import AppLayout from '../Layouts/AppLayout'
 
 declare module '@inertiajs/core' {

@@ -1,5 +1,5 @@
+import { Form } from '@adwd/inertia-preact'
 import { isEqual } from 'es-toolkit'
-import { Form } from 'inertia-preact'
 
 export default function PrecognitionBefore() {
   const handleBeforeValidation = (

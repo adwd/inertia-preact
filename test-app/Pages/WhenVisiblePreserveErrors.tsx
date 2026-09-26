@@ -1,4 +1,4 @@
-import { useForm, usePage, WhenVisible } from 'inertia-preact'
+import { useForm, usePage, WhenVisible } from '@adwd/inertia-preact'
 
 export default ({ foo }: { foo?: string }) => {
   const { errors } = usePage().props as { errors?: { name?: string } }

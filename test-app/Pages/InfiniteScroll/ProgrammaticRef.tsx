@@ -1,5 +1,5 @@
+import { InfiniteScroll } from '@adwd/inertia-preact'
 import { InfiniteScrollRef } from '@inertiajs/core'
-import { InfiniteScroll } from 'inertia-preact'
 import { useCallback, useEffect, useState } from 'preact/hooks'
 import UserCard, { User } from './UserCard'
 

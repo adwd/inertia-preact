@@ -1,4 +1,4 @@
-import { InfiniteScroll, router, usePage } from 'inertia-preact'
+import { InfiniteScroll, router, usePage } from '@adwd/inertia-preact'
 import { useRef, useState } from 'preact/hooks'
 
 export default ({ users }: { users: { data: { id: number; name: string }[] } }) => {

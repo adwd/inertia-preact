@@ -1,4 +1,4 @@
-import { Form } from 'inertia-preact'
+import { Form } from '@adwd/inertia-preact'
 import { useMemo, useState } from 'preact/hooks'
 
 const ChildElement = ({ name }: { name: string }) => {

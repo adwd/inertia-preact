@@ -1,4 +1,4 @@
-import { InertiaForm, useForm } from 'inertia-preact'
+import { InertiaForm, useForm } from '@adwd/inertia-preact'
 import { Component } from 'preact'
 import { useRef } from 'preact/hooks'
 

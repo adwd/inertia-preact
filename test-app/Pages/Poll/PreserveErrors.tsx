@@ -1,4 +1,4 @@
-import { useForm, usePage, usePoll } from 'inertia-preact'
+import { useForm, usePage, usePoll } from '@adwd/inertia-preact'
 
 export default ({ time }: { time: number }) => {
   const { errors } = usePage().props as { errors?: { name?: string } }

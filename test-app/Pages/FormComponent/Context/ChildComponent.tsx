@@ -1,4 +1,4 @@
-import { useFormContext } from 'inertia-preact'
+import { useFormContext } from '@adwd/inertia-preact'
 
 export default ({ formId }: { formId?: string }) => {
   const form = useFormContext()

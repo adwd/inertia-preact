@@ -1,4 +1,4 @@
-import { router, usePoll } from 'inertia-preact'
+import { router, usePoll } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

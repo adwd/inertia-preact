@@ -1,4 +1,4 @@
-import { Link } from 'inertia-preact'
+import { Link } from '@adwd/inertia-preact'
 import { useRef } from 'preact/hooks'
 
 declare global {

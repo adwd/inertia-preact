@@ -1,4 +1,4 @@
-import { Link, router } from 'inertia-preact'
+import { Link, router } from '@adwd/inertia-preact'
 
 export default ({ foo, auth, errors }: { foo: string; auth?: { user: string }; errors?: Record<string, string> }) => {
   const visitWithComponent = () => {

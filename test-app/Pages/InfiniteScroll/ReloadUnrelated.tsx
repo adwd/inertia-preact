@@ -1,4 +1,4 @@
-import { InfiniteScroll, router } from 'inertia-preact'
+import { InfiniteScroll, router } from '@adwd/inertia-preact'
 import UserCard, { User } from './UserCard'
 
 export default ({ users, time }: { users: { data: User[] }; time: number }) => {

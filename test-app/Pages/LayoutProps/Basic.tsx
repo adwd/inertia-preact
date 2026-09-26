@@ -1,4 +1,4 @@
-import { Link, setLayoutProps } from 'inertia-preact'
+import { Link, setLayoutProps } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 import AppLayout from '../../Layouts/AppLayout'
 

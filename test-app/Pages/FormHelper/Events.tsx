@@ -1,5 +1,5 @@
+import { useForm, usePage } from '@adwd/inertia-preact'
 import type { CancelToken, Errors, HttpProgressEvent, Page, PendingVisit } from '@inertiajs/core'
-import { useForm, usePage } from 'inertia-preact'
 import { useLayoutEffect } from 'preact/hooks'
 
 declare global {

@@ -1,4 +1,4 @@
-import { router, usePage } from 'inertia-preact'
+import { router, usePage } from '@adwd/inertia-preact'
 
 export default () => {
   const { foo, bar, timeframe } = usePage<{ foo?: string; bar?: string; timeframe?: string }>().props

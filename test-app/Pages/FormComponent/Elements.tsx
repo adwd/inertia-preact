@@ -1,5 +1,5 @@
+import { config, Form } from '@adwd/inertia-preact'
 import { QueryStringArrayFormatOption } from '@inertiajs/core'
-import { config, Form } from 'inertia-preact'
 
 export default ({
   queryStringArrayFormat,

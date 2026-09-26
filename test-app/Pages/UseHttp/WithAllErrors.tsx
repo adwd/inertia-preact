@@ -1,4 +1,4 @@
-import { useHttp } from 'inertia-preact'
+import { useHttp } from '@adwd/inertia-preact'
 
 interface ValidateResponse {
   success: boolean

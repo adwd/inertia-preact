@@ -1,4 +1,4 @@
-import { InfiniteScroll, usePage, WhenVisible } from 'inertia-preact'
+import { InfiniteScroll, usePage, WhenVisible } from '@adwd/inertia-preact'
 import UserCard, { User } from './UserCard'
 
 const Users = () => {

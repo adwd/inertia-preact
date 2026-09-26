@@ -1,4 +1,4 @@
-import { Head, Link, router } from 'inertia-preact'
+import { Head, Link, router } from '@adwd/inertia-preact'
 
 export default ({ foo, next }: { foo: string; next: string }) => {
   const override = new URLSearchParams(window.location.search).has('override')

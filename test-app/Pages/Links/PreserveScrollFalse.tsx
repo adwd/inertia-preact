@@ -1,5 +1,5 @@
+import { Link } from '@adwd/inertia-preact'
 import type { Page } from '@inertiajs/core'
-import { Link } from 'inertia-preact'
 import type { ComponentChildren } from 'preact'
 import WithoutScrollRegion from '@/Layouts/WithoutScrollRegion.jsx'
 

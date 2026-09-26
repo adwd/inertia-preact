@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 import { Component } from 'preact'
 
 type MemoChildProps = { prefix: string; item: { label: string } }

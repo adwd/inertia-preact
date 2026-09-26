@@ -1,4 +1,4 @@
-import { config, useForm } from 'inertia-preact'
+import { config, useForm } from '@adwd/inertia-preact'
 
 export default () => {
   // Set global config for withAllErrors (no .withAllErrors() call on the form)

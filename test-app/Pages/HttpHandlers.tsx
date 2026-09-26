@@ -1,4 +1,4 @@
-import { http, router } from 'inertia-preact'
+import { http, router } from '@adwd/inertia-preact'
 import { useEffect } from 'preact/hooks'
 
 declare global {

@@ -1,4 +1,4 @@
-import { Link, router, useForm } from 'inertia-preact'
+import { Link, router, useForm } from '@adwd/inertia-preact'
 
 export default ({ pageNumber, lastLoaded, propType }: { pageNumber: number; lastLoaded: number; propType: string }) => {
   const form = useForm({

@@ -1,4 +1,4 @@
-import { Link, WhenMounted } from 'inertia-preact'
+import { Link, WhenMounted } from '@adwd/inertia-preact'
 import WhenMountedChild from '@/Components/WhenMountedChild'
 import WhenMountedFallback from '@/Components/WhenMountedFallback'
 

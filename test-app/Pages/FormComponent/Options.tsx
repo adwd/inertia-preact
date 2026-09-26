@@ -1,5 +1,5 @@
+import { Form } from '@adwd/inertia-preact'
 import type { Method, QueryStringArrayFormatOption } from '@inertiajs/core'
-import { Form } from 'inertia-preact'
 import { useMemo, useState } from 'preact/hooks'
 import Article from './../Article'
 

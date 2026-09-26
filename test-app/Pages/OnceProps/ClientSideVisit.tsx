@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 
 export default ({ foo, bar }: { foo: string; bar: string }) => {
   const pushWithoutPreserving = () => {

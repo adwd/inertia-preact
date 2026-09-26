@@ -1,5 +1,5 @@
+import { router } from '@adwd/inertia-preact'
 import { Page } from '@inertiajs/core'
-import { router } from 'inertia-preact'
 import { useState } from 'preact/hooks'
 
 interface PageProps {

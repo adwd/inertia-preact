@@ -1,5 +1,5 @@
+import { config, Link, useForm, usePage } from '@adwd/inertia-preact'
 import type { VisitOptions } from '@inertiajs/core'
-import { config, Link, useForm, usePage } from 'inertia-preact'
 
 export default () => {
   const page = usePage()

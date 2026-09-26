@@ -1,4 +1,4 @@
-import { Deferred, Link, router, usePage } from 'inertia-preact'
+import { Deferred, Link, router, usePage } from '@adwd/inertia-preact'
 
 const Users = () => {
   const { users } = usePage<{ users?: { text: string } }>().props

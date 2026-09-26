@@ -1,4 +1,4 @@
-import { http } from 'inertia-preact'
+import { http } from '@adwd/inertia-preact'
 
 declare global {
   interface Window {

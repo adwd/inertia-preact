@@ -206,6 +206,9 @@ importers:
 
   test-app:
     dependencies:
+      '@adwd/inertia-preact':
+        specifier: workspace:*
+        version: link:../packages/preact
       '@babel/core':
         specifier: ^7.28.0
         version: 7.29.7
@@ -221,9 +224,6 @@ importers:
       es-toolkit:
         specifier: ^1.33.0
         version: 1.52.0
-      inertia-preact:
-        specifier: workspace:*
-        version: link:../packages/preact
       laravel-precognition:
         specifier: ^2.0.0
         version: 2.0.0

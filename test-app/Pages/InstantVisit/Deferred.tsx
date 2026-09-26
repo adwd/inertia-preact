@@ -1,4 +1,4 @@
-import { Deferred } from 'inertia-preact'
+import { Deferred } from '@adwd/inertia-preact'
 
 export default ({ title, heavyData }: { title?: string; heavyData?: string }) => {
   return (

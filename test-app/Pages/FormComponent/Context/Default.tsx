@@ -1,4 +1,4 @@
-import { Form } from 'inertia-preact'
+import { Form } from '@adwd/inertia-preact'
 import ChildComponent from './ChildComponent'
 import NestedComponent from './NestedComponent'
 import OutsideFormComponent from './OutsideFormComponent'

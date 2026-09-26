@@ -1,4 +1,4 @@
-import { useForm } from 'inertia-preact'
+import { useForm } from '@adwd/inertia-preact'
 import { NamedInputEvent } from 'laravel-precognition'
 
 export default () => {

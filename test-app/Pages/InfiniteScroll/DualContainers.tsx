@@ -1,4 +1,4 @@
-import { InfiniteScroll } from 'inertia-preact'
+import { InfiniteScroll } from '@adwd/inertia-preact'
 import UserCard, { User } from './UserCard'
 
 interface Props {

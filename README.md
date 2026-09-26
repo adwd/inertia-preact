@@ -1,6 +1,6 @@
 # inertia-preact
 
-The [Preact](https://preactjs.com) adapter for [Inertia.js](https://inertiajs.com) 3.
+A [Preact](https://preactjs.com) adapter for [Inertia.js](https://inertiajs.com) 3.
 
 See [packages/preact/README.md](packages/preact/README.md) for installation and usage.
 
@@ -8,7 +8,7 @@ See [packages/preact/README.md](packages/preact/README.md) for installation and 
 
 | Path | |
 | --- | --- |
-| `packages/preact` | The adapter (npm package `inertia-preact`) |
+| `packages/preact` | The adapter (package `@adwd/inertia-preact`) |
 | `test-app` | Pages for the end-to-end tests, written in Preact |
 | `scripts/e2e.mjs` | Runs the official Inertia end-to-end suite against the adapter |
 | `docs/PLAN.md` | Development plan, progress and decisions (in Japanese) |
@@ -39,6 +39,16 @@ pnpm test:e2e:ssr   # its server-side rendering tests
 | `VITE_PREACT_COMPAT=true` | Loads `preact/compat` in the test app, like an app using it |
 
 Other arguments are passed to Playwright, e.g. `pnpm test:e2e tests/links.spec.ts --repeat-each=3`.
+
+## Releasing
+
+Bump the version in `packages/preact/package.json`, commit, and push a tag named after it:
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+The Publish workflow (`.github/workflows/publish.yml`) then builds, tests and publishes the package to npm, with provenance, and to GitHub Packages. It publishes to npm with [trusted publishing](https://docs.npmjs.com/trusted-publishers), configured on npmjs.com for this repository and `publish.yml`, or with an `NPM_TOKEN` repository secret (needed for the first version, since trusted publishing can only be configured for an existing package).
 
 ## License
 

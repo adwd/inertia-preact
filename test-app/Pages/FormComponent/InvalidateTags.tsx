@@ -1,4 +1,4 @@
-import { Form, Link } from 'inertia-preact'
+import { Form, Link } from '@adwd/inertia-preact'
 
 export default ({ lastLoaded, propType }: { lastLoaded: number; propType: string }) => {
   return (

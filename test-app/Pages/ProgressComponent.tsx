@@ -1,4 +1,4 @@
-import { progress } from 'inertia-preact'
+import { progress } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 declare global {

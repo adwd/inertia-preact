@@ -1,4 +1,4 @@
-import { router } from 'inertia-preact'
+import { router } from '@adwd/inertia-preact'
 import { useRef } from 'preact/hooks'
 
 // The scroll position the container jumps to before the continuous scrolling starts, so the

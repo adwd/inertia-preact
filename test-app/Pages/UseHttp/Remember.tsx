@@ -1,4 +1,4 @@
-import { Link, useHttp } from 'inertia-preact'
+import { Link, useHttp } from '@adwd/inertia-preact'
 
 export default () => {
   const form = useHttp('useHttpRemember', {

@@ -1,4 +1,4 @@
-import { useForm } from 'inertia-preact'
+import { useForm } from '@adwd/inertia-preact'
 import type { TargetedEvent } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 

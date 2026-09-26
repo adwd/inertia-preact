@@ -1,4 +1,4 @@
-import { router, useForm } from 'inertia-preact'
+import { router, useForm } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 interface Todo {

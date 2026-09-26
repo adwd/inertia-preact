@@ -1,5 +1,5 @@
+import { router } from '@adwd/inertia-preact'
 import { VisitHelperOptions } from '@inertiajs/core'
-import { router } from 'inertia-preact'
 import type { ComponentChildren } from 'preact'
 import WithScrollRegion from '@/Layouts/WithScrollRegion.jsx'
 

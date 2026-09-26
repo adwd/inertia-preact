@@ -1,4 +1,4 @@
-import { Form } from 'inertia-preact'
+import { Form } from '@adwd/inertia-preact'
 
 export default function DottedKeys() {
   return (

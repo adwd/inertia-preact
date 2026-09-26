@@ -1,5 +1,5 @@
+import { Form } from '@adwd/inertia-preact'
 import type { FormDataConvertible } from '@inertiajs/core'
-import { Form } from 'inertia-preact'
 import { useState } from 'preact/hooks'
 
 export default () => {

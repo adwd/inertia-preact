@@ -1,5 +1,5 @@
+import { Link } from '@adwd/inertia-preact'
 import type { Method } from '@inertiajs/core'
-import { Link } from 'inertia-preact'
 
 export default ({ method }: { method: Method }) => {
   return (

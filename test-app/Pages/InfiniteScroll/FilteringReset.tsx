@@ -1,5 +1,5 @@
+import { InfiniteScroll, useForm } from '@adwd/inertia-preact'
 import { debounce } from 'es-toolkit'
-import { InfiniteScroll, useForm } from 'inertia-preact'
 import type { TargetedEvent } from 'preact'
 import { useEffect, useMemo } from 'preact/hooks'
 import UserCard, { User } from './UserCard'

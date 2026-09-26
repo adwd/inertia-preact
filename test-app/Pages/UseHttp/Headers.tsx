@@ -1,4 +1,4 @@
-import { useHttp } from 'inertia-preact'
+import { useHttp } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 
 interface HeadersResponse {

@@ -1,4 +1,4 @@
-import { Head, Link, router } from 'inertia-preact'
+import { Head, Link, router } from '@adwd/inertia-preact'
 
 export default (props: { example: string }) => {
   const visitsMethod = (e: MouseEvent) => {

@@ -1,4 +1,4 @@
-import { Deferred, router } from 'inertia-preact'
+import { Deferred, router } from '@adwd/inertia-preact'
 import { useEffect } from 'preact/hooks'
 
 export default ({ foo, bar }: { foo?: { text: string }; bar?: { text: string } }) => {
