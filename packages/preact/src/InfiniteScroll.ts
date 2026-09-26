@@ -152,7 +152,7 @@ export default class InfiniteScroll
 
   hasPrevious = (): boolean => this.instance?.dataManager.hasPrevious() ?? false
 
-  override render() {
+  override render(): VNode<any> {
     const {
       data: _data,
       buffer: _buffer,

@@ -17,6 +17,7 @@ import {
   h,
   type TargetedKeyboardEvent,
   type TargetedMouseEvent,
+  type VNode,
 } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
@@ -81,7 +82,7 @@ export default function Link({
   instant = false,
   pageProps = null,
   ...props
-}: LinkProps) {
+}: LinkProps): VNode<any> {
   const [inFlightCount, setInFlightCount] = useState(0)
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 

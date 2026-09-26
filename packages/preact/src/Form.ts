@@ -26,6 +26,7 @@ import {
   type FormHTMLAttributes,
   h,
   type TargetedSubmitEvent,
+  type VNode,
 } from 'preact'
 import { useContext } from 'preact/hooks'
 import { InstanceRef, refProp } from './ref'
@@ -285,7 +286,7 @@ export default class Form<TForm extends object = Record<string, any>>
 
   touched = (field?: string): boolean => this.store.touched(field)
 
-  override render() {
+  override render(): VNode<any> {
     const {
       action = '',
       method: _method,

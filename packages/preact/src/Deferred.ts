@@ -16,7 +16,7 @@ export interface DeferredProps {
 }
 
 /** Renders a fallback until the given deferred props are loaded. */
-export default function Deferred({ data, fallback, children, rescue }: DeferredProps) {
+export default function Deferred({ data, fallback, children, rescue }: DeferredProps): ComponentChildren {
   if (!data) {
     throw new Error('`<Deferred>` requires a `data` prop to be a string or array of strings')
   }

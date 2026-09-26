@@ -11,7 +11,7 @@ import {
   router,
   type ServerHeadOption,
 } from '@inertiajs/core'
-import { Component, type ComponentChildren, type ComponentType, h, isValidElement } from 'preact'
+import { Component, type ComponentChildren, type ComponentType, h, isValidElement, type VNode } from 'preact'
 import { AppContext, type AppState, PageContext } from './context'
 import { layoutPropsStore, resetLayoutProps } from './layoutProps'
 import type { LayoutFunction, PageComponent, PageHandlerArgs } from './types'
@@ -257,7 +257,7 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
     this.setState(({ page }) => ({ page: { ...page, flash } }))
   }
 
-  override render() {
+  override render(): VNode<any> {
     const { component, page, key } = this.state
     const layoutProps = this.app.hydrated ? layoutPropsStore.get() : emptyLayoutProps
 

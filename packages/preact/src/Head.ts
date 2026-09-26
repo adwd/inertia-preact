@@ -11,7 +11,7 @@ export interface HeadProps {
 }
 
 /** Manages elements in the document `<head>`, including during SSR. Renders nothing itself. */
-export default function Head({ title, children }: HeadProps) {
+export default function Head({ title, children }: HeadProps): null {
   const app = useContext(AppContext)
 
   if (!app) {

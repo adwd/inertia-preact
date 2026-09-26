@@ -13,7 +13,7 @@ export interface WhenMountedProps {
  * fallback is rendered on the server and during hydration, so the markup matches. Anywhere else (a page
  * rendered in the browser, remounts, visits) the children render right away.
  */
-export default function WhenMounted({ children, fallback = null }: WhenMountedProps) {
+export default function WhenMounted({ children, fallback = null }: WhenMountedProps): ComponentChildren {
   const app = useContext(AppContext)
   const [mounted, setMounted] = useState(() => app?.hydrated ?? false)
 

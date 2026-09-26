@@ -30,7 +30,7 @@ export default function WhenVisible({
   buffer = 0,
   as = 'div',
   always = false,
-}: WhenVisibleProps) {
+}: WhenVisibleProps): ComponentChildren {
   const keys = data ? (Array.isArray(data) ? data : [data]) : []
   const pageProps = usePage().props
   const propsLoaded = keys.length > 0 && keys.every((key) => get(pageProps, key) !== undefined)
