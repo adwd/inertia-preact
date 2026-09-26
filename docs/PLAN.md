@@ -69,7 +69,7 @@ docs/PLAN.md       本ドキュメント
 | 7 | 単体テスト | ✅ |
 | 8 | 追加検証 (axios クライアント、preact/debug、Preact 11 / 最小対応バージョン、preact/compat 併用) | ✅ |
 | 9 | README・API ドキュメント・CI | ✅ |
-| 10 | 公開 (GitHub・GitHub Packages) | 🚧 |
+| 10 | 公開 (GitHub・GitHub Packages) | ✅ |
 
 ## 進捗ログ
 
@@ -248,6 +248,7 @@ docs/PLAN.md       本ドキュメント
   名前が必須)。
 - 公開先は GitHub Packages のみ (npm には公開しない)。`publishConfig.registry` で GitHub のレジストリに固定。
 - `.github/workflows/publish.yml`: バージョンタグ (`v0.1.0` など) の push で、ビルド・テストの後に公開する。
+- v0.1.0 を公開 (https://github.com/adwd/inertia-preact/pkgs/npm/inertia-preact、Public、34 ファイル・67 kB)。
 
 ## 完了時点のまとめ
 
