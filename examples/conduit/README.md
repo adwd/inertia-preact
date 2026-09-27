@@ -24,7 +24,7 @@ Node 22.18 or later is needed (for `node:sqlite`, and running TypeScript files).
 
 ## The server is in charge
 
-- **Routing**: the Hono routes (`server/app.ts`) decide which page to show, with `c.render('Article', props)`. There is no client-side router.
+- **Routing**: the Hono routes (`server/routes/`) decide which page to show, with `c.render('Article', props)`. There is no client-side router.
 - **Data**: every page gets its data as props, loaded from SQLite by the route. There is no API to design for the frontend, and no data fetching in components.
 - **Authorization**: the server decides what the user may do, and sends it with the data (`article.can.edit`, `comment.can.delete`). Pages only show what they're told.
 - **Forms** are plain HTML forms, written with Inertia's `<Form>`: uncontrolled fields with a `name` and a `defaultValue`, and an `action` and `method`. `<Form>` submits the fields with an Inertia visit, so there is no form state or submit handler in the pages.
@@ -44,7 +44,8 @@ Inertia turns the links and forms into requests for the next page, and the clien
 
 ```
 server/
-  app.ts          routes: the pages, forms and actions
+  app.ts          the app: middleware and routes
+  routes/         the pages, forms and actions, by feature (home, auth, settings, editor, articles, profiles)
   inertia.ts      the Inertia middleware: shared props, and the HTML document with SSR
   session.ts      sessions and flash data
   db.ts           the SQLite schema and queries
