@@ -27,7 +27,8 @@ Node 22.18 or later is needed (for `node:sqlite`, and running TypeScript files).
 - **Routing**: the Hono routes (`server/app.ts`) decide which page to show, with `c.render('Article', props)`. There is no client-side router.
 - **Data**: every page gets its data as props, loaded from SQLite by the route. There is no API to design for the frontend, and no data fetching in components.
 - **Authorization**: the server decides what the user may do, and sends it with the data (`article.can.edit`, `comment.can.delete`). Pages only show what they're told.
-- **Validation**: forms post to the server, which validates them and redirects back with the errors (kept in the session for the next request), like any server-rendered app. `useForm` shows them.
+- **Forms** are plain HTML forms, written with Inertia's `<Form>`: uncontrolled fields with a `name` and a `defaultValue`, and an `action` and `method`. `<Form>` submits the fields with an Inertia visit, so there is no form state or submit handler in the pages.
+- **Validation**: the server validates the forms and redirects back with the errors (kept in the session for the next request), like any server-rendered app. The pages show the `errors` prop.
 - **Authentication**: a session cookie (`HttpOnly`, `SameSite=Lax`), not a token in the browser. Forms from other sites are rejected (`hono/csrf`).
 - **Markdown** is rendered to HTML by the server, which drops raw HTML and unsafe links.
 - **Server-side rendering**: the first page arrives as HTML, rendered by the same process with `preact-render-to-string`, then hydrated.

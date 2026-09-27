@@ -1,6 +1,8 @@
-/** The validation errors sent back by the server */
-export default function ErrorMessages({ errors }: { errors: Record<string, string | undefined> }) {
-  const messages = Object.values(errors).filter((message) => message !== undefined)
+import { usePage } from '@adwd/inertia-preact'
+
+/** The validation errors the server sent back with the page, after a form submission */
+export default function ErrorMessages() {
+  const messages = Object.values(usePage().props.errors)
 
   if (messages.length === 0) {
     return null

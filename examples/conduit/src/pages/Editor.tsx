@@ -1,4 +1,4 @@
-import { Head, useForm } from '@adwd/inertia-preact'
+import { Form, Head } from '@adwd/inertia-preact'
 import { useState } from 'preact/hooks'
 import ErrorMessages from '../components/ErrorMessages.tsx'
 
@@ -7,42 +7,54 @@ interface Props {
   article: { slug: string; title: string; description: string; body: string; tagList: string[] } | null
 }
 
+/** The tags as pills, submitted as `tagList[]` fields, and an input adding a tag on Enter */
+function TagInput({ initialTags }: { initialTags: string[] }) {
+  const [tags, setTags] = useState(initialTags)
+
+  function addTag(input: HTMLInputElement) {
+    const tag = input.value.trim()
+
+    if (tag && !tags.includes(tag)) {
+      setTags([...tags, tag])
+    }
+
+    input.value = ''
+  }
+
+  return (
+    <fieldset class="form-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Enter tags"
+        onKeyDown={(event) => {
+          // Enter adds the tag, rather than submitting the form
+          if (event.key === 'Enter') {
+            event.preventDefault()
+            addTag(event.currentTarget)
+          }
+        }}
+        onBlur={(event) => addTag(event.currentTarget)}
+      />
+      <div class="tag-list">
+        {tags.map((tag) => (
+          <span key={tag} class="tag-default tag-pill">
+            <input type="hidden" name="tagList[]" value={tag} />
+            <i
+              class="ion-close-round"
+              role="button"
+              aria-label={`Remove ${tag}`}
+              onClick={() => setTags(tags.filter((candidate) => candidate !== tag))}
+            />{' '}
+            {tag}
+          </span>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
 export default function Editor({ article }: Props) {
-  const form = useForm({
-    title: article?.title ?? '',
-    description: article?.description ?? '',
-    body: article?.body ?? '',
-    tagList: article?.tagList ?? [],
-  })
-  const [tag, setTag] = useState('')
-
-  function addTag() {
-    const name = tag.trim()
-
-    if (name && !form.data.tagList.includes(name)) {
-      form.setData('tagList', [...form.data.tagList, name])
-    }
-
-    setTag('')
-  }
-
-  function removeTag(name: string) {
-    form.setData(
-      'tagList',
-      form.data.tagList.filter((candidate) => candidate !== name),
-    )
-  }
-
-  function submit(event: SubmitEvent) {
-    event.preventDefault()
-
-    if (article) {
-      form.put(`/editor/${encodeURIComponent(article.slug)}`)
-    } else {
-      form.post('/editor')
-    }
-  }
-
   return (
     <div class="editor-page">
       <Head title={article ? `Edit ${article.title}` : 'New Article'} />
@@ -50,75 +62,45 @@ export default function Editor({ article }: Props) {
       <div class="container page">
         <div class="row">
           <div class="col-md-10 offset-md-1 col-xs-12">
-            <ErrorMessages errors={form.errors} />
+            <ErrorMessages />
 
-            <form onSubmit={submit}>
-              <fieldset disabled={form.processing}>
-                <fieldset class="form-group">
-                  <input
-                    type="text"
-                    class="form-control form-control-lg"
-                    name="title"
-                    placeholder="Article Title"
-                    value={form.data.title}
-                    onInput={(event) => form.setData('title', event.currentTarget.value)}
-                  />
-                </fieldset>
-                <fieldset class="form-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="description"
-                    placeholder="What's this article about?"
-                    value={form.data.description}
-                    onInput={(event) => form.setData('description', event.currentTarget.value)}
-                  />
-                </fieldset>
-                <fieldset class="form-group">
-                  <textarea
-                    class="form-control"
-                    rows={8}
-                    name="body"
-                    placeholder="Write your article (in markdown)"
-                    value={form.data.body}
-                    onInput={(event) => form.setData('body', event.currentTarget.value)}
-                  />
-                </fieldset>
-                <fieldset class="form-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter tags"
-                    value={tag}
-                    onInput={(event) => setTag(event.currentTarget.value)}
-                    onKeyDown={(event) => {
-                      // Enter adds the tag instead of submitting the form
-                      if (event.key === 'Enter') {
-                        event.preventDefault()
-                        addTag()
-                      }
-                    }}
-                    onBlur={addTag}
-                  />
-                  <div class="tag-list">
-                    {form.data.tagList.map((name) => (
-                      <span key={name} class="tag-default tag-pill">
-                        <i
-                          class="ion-close-round"
-                          role="button"
-                          aria-label={`Remove ${name}`}
-                          onClick={() => removeTag(name)}
-                        />{' '}
-                        {name}
-                      </span>
-                    ))}
-                  </div>
-                </fieldset>
-                <button class="btn btn-lg pull-xs-right btn-primary" type="submit">
-                  Publish Article
-                </button>
+            <Form
+              action={article ? `/editor/${encodeURIComponent(article.slug)}` : '/editor'}
+              method={article ? 'put' : 'post'}
+              disableWhileProcessing
+            >
+              <fieldset class="form-group">
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  name="title"
+                  placeholder="Article Title"
+                  defaultValue={article?.title}
+                />
               </fieldset>
-            </form>
+              <fieldset class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="description"
+                  placeholder="What's this article about?"
+                  defaultValue={article?.description}
+                />
+              </fieldset>
+              <fieldset class="form-group">
+                <textarea
+                  class="form-control"
+                  rows={8}
+                  name="body"
+                  placeholder="Write your article (in markdown)"
+                  defaultValue={article?.body}
+                />
+              </fieldset>
+              <TagInput initialTags={article?.tagList ?? []} />
+              <button class="btn btn-lg pull-xs-right btn-primary" type="submit">
+                Publish Article
+              </button>
+            </Form>
           </div>
         </div>
       </div>

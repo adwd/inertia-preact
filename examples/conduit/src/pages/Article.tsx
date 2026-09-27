@@ -1,4 +1,4 @@
-import { Head, Link, router, useForm, usePage } from '@adwd/inertia-preact'
+import { Form, Head, Link, router, usePage } from '@adwd/inertia-preact'
 import { FavoriteButton, FollowButton } from '../components/actions.tsx'
 import ErrorMessages from '../components/ErrorMessages.tsx'
 import TagList from '../components/TagList.tsx'
@@ -55,13 +55,7 @@ function ArticleMeta({ article }: { article: ArticleData }) {
 
 function Comments({ article, comments }: Props) {
   const user = usePage().props.auth.user
-  const form = useForm({ body: '' })
   const commentsUrl = `${articleUrl(article.slug)}/comments`
-
-  function submit(event: SubmitEvent) {
-    event.preventDefault()
-    form.post(commentsUrl, { preserveScroll: true, only: ['comments', 'errors'], onSuccess: () => form.reset() })
-  }
 
   function remove(comment: Comment) {
     router.delete(`${commentsUrl}/${comment.id}`, { preserveScroll: true, preserveState: true, only: ['comments'] })
@@ -72,25 +66,26 @@ function Comments({ article, comments }: Props) {
       <div class="col-xs-12 col-md-8 offset-md-2">
         {user ? (
           <>
-            <ErrorMessages errors={form.errors} />
-            <form class="card comment-form" onSubmit={submit}>
+            <ErrorMessages />
+            {/* After posting, only the comments (and the errors) are reloaded */}
+            <Form
+              action={commentsUrl}
+              method="post"
+              class="card comment-form"
+              options={{ preserveScroll: true, only: ['comments', 'errors'] }}
+              resetOnSuccess
+              disableWhileProcessing
+            >
               <div class="card-block">
-                <textarea
-                  class="form-control"
-                  name="body"
-                  placeholder="Write a comment..."
-                  rows={3}
-                  value={form.data.body}
-                  onInput={(event) => form.setData('body', event.currentTarget.value)}
-                />
+                <textarea class="form-control" name="body" placeholder="Write a comment..." rows={3} />
               </div>
               <div class="card-footer">
                 <img src={avatar(user.image)} class="comment-author-img" alt="" />
-                <button class="btn btn-sm btn-primary" type="submit" disabled={form.processing}>
+                <button class="btn btn-sm btn-primary" type="submit">
                   Post Comment
                 </button>
               </div>
-            </form>
+            </Form>
           </>
         ) : (
           <p>
