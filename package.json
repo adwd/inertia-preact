@@ -6,7 +6,7 @@
     "build": "pnpm --filter @adwd/inertia-preact build",
     "test": "pnpm --filter @adwd/inertia-preact test",
     "type-check": "pnpm -r type-check",
-    "lint": "oxlint packages/preact/src && pnpm --filter inertia-preact-test-app lint",
+    "lint": "oxlint packages/preact/src && pnpm --filter inertia-preact-test-app --filter conduit-example lint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test:e2e": "node scripts/e2e.mjs",

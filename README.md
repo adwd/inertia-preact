@@ -2,13 +2,14 @@
 
 A [Preact](https://preactjs.com) adapter for [Inertia.js](https://inertiajs.com) 3.
 
-See [packages/preact/README.md](packages/preact/README.md) for installation and usage.
+See [packages/preact/README.md](packages/preact/README.md) for installation and usage, and [examples/conduit](examples/conduit) for an example app.
 
 ## Repository
 
 | Path | |
 | --- | --- |
 | `packages/preact` | The adapter (package `@adwd/inertia-preact`) |
+| `examples/conduit` | [RealWorld](https://github.com/realworld-apps/realworld)'s Conduit with Hono, Inertia and Preact: a complete example app |
 | `test-app` | Pages for the end-to-end tests, written in Preact |
 | `scripts/e2e.mjs` | Runs the official Inertia end-to-end suite against the adapter |
 | `docs/PLAN.md` | Development plan, progress and decisions (in Japanese) |

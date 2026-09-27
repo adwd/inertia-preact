@@ -70,6 +70,7 @@ docs/PLAN.md       本ドキュメント
 | 8 | 追加検証 (axios クライアント、preact/debug、Preact 11 / 最小対応バージョン、preact/compat 併用) | ✅ |
 | 9 | README・API ドキュメント・CI | ✅ |
 | 10 | 公開 (GitHub・GitHub Packages) | ✅ |
+| 11 | サンプルアプリ (RealWorld Conduit・Hono) | ✅ |
 
 ## 進捗ログ
 
@@ -249,6 +250,27 @@ docs/PLAN.md       本ドキュメント
 - 公開先は GitHub Packages のみ (npm には公開しない)。`publishConfig.registry` で GitHub のレジストリに固定。
 - `.github/workflows/publish.yml`: バージョンタグ (`v0.1.0` など) の push で、ビルド・テストの後に公開する。
 - v0.1.0 を公開 (https://github.com/adwd/inertia-preact/pkgs/npm/inertia-preact、Public、34 ファイル・67 kB)。
+
+### フェーズ 11: サンプルアプリ (`examples/conduit`)
+
+- test-app はテスト用で味気ないため、SPA の定番サンプル RealWorld (Conduit) を Hono で実装した。
+  TodoMVC は小さすぎ、Hacker News クローンは読み取り中心でフォームがないため、認証・CRUD・フォーム・
+  ページネーションがそろう RealWorld を選んだ。
+- Inertia のサーバー中心の長所を残す方針:
+  - ルーティング・データ取得・認可 (`can`)・入力検証はサーバー。ページは props を描画するだけで API はない。
+  - 検証エラーはセッションのフラッシュで redirect back。認証は Cookie セッション (RealWorld の JWT +
+    localStorage ではなく、仕様が認める session/cookie 方式)。`hono/csrf` で他サイトのフォームを拒否。
+  - Markdown はサーバーで HTML にし、生の HTML と危険な URL を落とす。SSR は同じプロセスで行う。
+- Inertia 3 の機能: 部分リロード (フィード・ページ・コメント)、Deferred (人気タグ)、楽観的更新
+  (お気に入り・フォロー)、ホバーでのプリフェッチ。
+- サーバー: Hono + `@hono/inertia` (Hono 公式の Inertia ミドルウェア。部分リロード・Deferred・マージ・
+  409・303 に対応。エラー・フラッシュ・SSR はアプリ側で足した)、`node:sqlite` (ネイティブビルド不要)。
+  開発は Vite の middleware モードで Hono アプリを `ssrLoadModule` し、変更を再読み込みする。
+- 見た目・URL・クラス名は RealWorld のテンプレートと E2E セレクタ規約に合わせた。共通 E2E スイートは
+  API と localStorage の JWT を前提とするため使わず、同じセレクタで Playwright テスト 13 件を書いた
+  (本番ビルドに対して実行。5 回繰り返し 8 並列で 65/65)。
+- 手動確認で見つけた不具合: CSRF の 403 が共通のエラーハンドラで 500 になっていた → HTTPException は
+  そのまま返す。見直しで、未登録メールのログインが速く返る (登録有無が分かる) 点を修正。
 
 ## 完了時点のまとめ
 

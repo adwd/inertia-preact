@@ -27,6 +27,29 @@ jobs:
   # The harness runs Playwright without CI set, so --retries and --workers give the settings of the Inertia
   # repository's CI: retries, since a few of its tests are timing sensitive (see docs/PLAN.md), and a core
   # left for the test server.
+  example:
+    name: Example app (Conduit)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: npx playwright install --with-deps chromium
+        working-directory: examples/conduit
+      - run: pnpm test:e2e
+        working-directory: examples/conduit
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-test-results
+          path: examples/conduit/test-results
+
   e2e-chromium:
     name: E2E (Chromium, Preact ${{ matrix.preact }}, ${{ matrix.http }})
     runs-on: ubuntu-24.04
