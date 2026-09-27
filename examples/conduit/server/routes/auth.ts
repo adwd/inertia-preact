@@ -6,14 +6,14 @@ import type { Env } from '../session.ts'
 import { formInput, isEmail, text, validate } from '../validation.ts'
 import { guest, hasErrors, withErrors } from './helpers.ts'
 
-/** Signing in, signing up and signing out */
-export function authRoutes(store: Store) {
+/** Signing in */
+export function loginRoutes(store: Store) {
   const routes = new Hono<Env>()
   const unknownUserHash = hashPassword(randomBytes(16).toString('hex'))
 
-  routes.get('/login', guest, (c) => c.render('Auth/Login', {}))
+  routes.get('/', guest, (c) => c.render('Auth/Login', {}))
 
-  routes.post('/login', guest, async (c) => {
+  routes.post('/', guest, async (c) => {
     const input = await formInput(c)
     const email = text(input.email)
     const password = typeof input.password === 'string' ? input.password : ''
@@ -39,9 +39,16 @@ export function authRoutes(store: Store) {
     return c.redirect('/', 303)
   })
 
-  routes.get('/register', guest, (c) => c.render('Auth/Register', {}))
+  return routes
+}
 
-  routes.post('/register', guest, async (c) => {
+/** Signing up */
+export function registerRoutes(store: Store) {
+  const routes = new Hono<Env>()
+
+  routes.get('/', guest, (c) => c.render('Auth/Register', {}))
+
+  routes.post('/', guest, async (c) => {
     const input = await formInput(c)
     const username = text(input.username)
     const email = text(input.email)
@@ -71,7 +78,14 @@ export function authRoutes(store: Store) {
     return c.redirect('/', 303)
   })
 
-  routes.post('/logout', (c) => {
+  return routes
+}
+
+/** Signing out */
+export function logoutRoutes() {
+  const routes = new Hono<Env>()
+
+  routes.post('/', (c) => {
     c.get('session').logout()
     return c.redirect('/', 303)
   })

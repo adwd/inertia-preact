@@ -4,10 +4,10 @@ import { HTTPException } from 'hono/http-exception'
 import type { Store } from './db.ts'
 import { type Assets, inertiaPages } from './inertia.ts'
 import { articleRoutes } from './routes/articles.ts'
-import { authRoutes } from './routes/auth.ts'
+import { loginRoutes, logoutRoutes, registerRoutes } from './routes/auth.ts'
 import { editorRoutes } from './routes/editor.ts'
 import { notFound } from './routes/helpers.ts'
-import { homeRoutes } from './routes/home.ts'
+import { homeRoutes, tagRoutes } from './routes/home.ts'
 import { profileRoutes } from './routes/profiles.ts'
 import { settingsRoutes } from './routes/settings.ts'
 import { type Env, sessions } from './session.ts'
@@ -26,11 +26,14 @@ export function createApp({ store, assets }: AppOptions) {
   app.use(inertiaPages(assets))
 
   app.route('/', homeRoutes(store))
-  app.route('/', authRoutes(store))
-  app.route('/', settingsRoutes(store))
-  app.route('/', editorRoutes(store))
-  app.route('/', articleRoutes(store))
-  app.route('/', profileRoutes(store))
+  app.route('/tag', tagRoutes(store))
+  app.route('/login', loginRoutes(store))
+  app.route('/register', registerRoutes(store))
+  app.route('/logout', logoutRoutes())
+  app.route('/settings', settingsRoutes(store))
+  app.route('/editor', editorRoutes(store))
+  app.route('/article', articleRoutes(store))
+  app.route('/profile', profileRoutes(store))
 
   // Last, for the requests no route matched
   app.all('*', notFound)

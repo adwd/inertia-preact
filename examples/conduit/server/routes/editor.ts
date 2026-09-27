@@ -30,9 +30,9 @@ async function articleInput(c: AppContext): Promise<[ArticleInput, Errors]> {
 export function editorRoutes(store: Store) {
   const routes = new Hono<Env>()
 
-  routes.get('/editor', auth, (c) => c.render('Editor', { article: null }))
+  routes.get('/', auth, (c) => c.render('Editor', { article: null }))
 
-  routes.post('/editor', auth, async (c) => {
+  routes.post('/', auth, async (c) => {
     const [input, errors] = await articleInput(c)
 
     if (hasErrors(errors)) {
@@ -43,7 +43,7 @@ export function editorRoutes(store: Store) {
     return c.redirect(`/article/${slug}`, 303)
   })
 
-  routes.get('/editor/:slug', auth, (c) => {
+  routes.get('/:slug', auth, (c) => {
     const article = ownArticle(store, c)
 
     if (!article) {
@@ -56,7 +56,7 @@ export function editorRoutes(store: Store) {
     return c.render('Editor', { article: { slug, title, description, body, tagList } })
   })
 
-  routes.put('/editor/:slug', auth, async (c) => {
+  routes.put('/:slug', auth, async (c) => {
     const article = ownArticle(store, c)
 
     if (!article) {

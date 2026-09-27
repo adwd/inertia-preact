@@ -9,7 +9,7 @@ import { auth, back, currentUser, hasErrors, notFound, ownArticle, viewerId, wit
 export function articleRoutes(store: Store) {
   const routes = new Hono<Env>()
 
-  routes.get('/article/:slug', (c) => {
+  routes.get('/:slug', (c) => {
     const found = store.article(c.req.param('slug'), viewerId(c))
 
     if (!found) {
@@ -28,7 +28,7 @@ export function articleRoutes(store: Store) {
     })
   })
 
-  routes.delete('/article/:slug', auth, (c) => {
+  routes.delete('/:slug', auth, (c) => {
     const article = ownArticle(store, c)
 
     if (!article) {
@@ -41,7 +41,7 @@ export function articleRoutes(store: Store) {
 
   // Favorites
 
-  routes.post('/article/:slug/favorite', auth, (c) => {
+  routes.post('/:slug/favorite', auth, (c) => {
     const article = store.articleRow(c.req.param('slug'))
 
     if (!article) {
@@ -52,7 +52,7 @@ export function articleRoutes(store: Store) {
     return back(c)
   })
 
-  routes.delete('/article/:slug/favorite', auth, (c) => {
+  routes.delete('/:slug/favorite', auth, (c) => {
     const article = store.articleRow(c.req.param('slug'))
 
     if (!article) {
@@ -65,7 +65,7 @@ export function articleRoutes(store: Store) {
 
   // Comments
 
-  routes.post('/article/:slug/comments', auth, async (c) => {
+  routes.post('/:slug/comments', auth, async (c) => {
     const article = store.articleRow(c.req.param('slug'))
 
     if (!article) {
@@ -86,7 +86,7 @@ export function articleRoutes(store: Store) {
     return back(c)
   })
 
-  routes.delete('/article/:slug/comments/:id', auth, (c) => {
+  routes.delete('/:slug/comments/:id', auth, (c) => {
     const comment = store.comment(Number(c.req.param('id')))
     const article = store.articleRow(c.req.param('slug'))
 

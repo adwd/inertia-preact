@@ -9,9 +9,9 @@ import { auth, currentUser, hasErrors, withErrors } from './helpers.ts'
 export function settingsRoutes(store: Store) {
   const routes = new Hono<Env>()
 
-  routes.get('/settings', auth, (c) => c.render('Settings', {}))
+  routes.get('/', auth, (c) => c.render('Settings', {}))
 
-  routes.put('/settings', auth, async (c) => {
+  routes.put('/', auth, async (c) => {
     const user = currentUser(c)
     const input = await formInput(c)
     const username = text(input.username)

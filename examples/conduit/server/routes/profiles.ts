@@ -25,8 +25,8 @@ export function profileRoutes(store: Store) {
     })
   }
 
-  routes.get('/profile/:username', (c) => profile(c, 'articles'))
-  routes.get('/profile/:username/favorites', (c) => profile(c, 'favorites'))
+  routes.get('/:username', (c) => profile(c, 'articles'))
+  routes.get('/:username/favorites', (c) => profile(c, 'favorites'))
 
   // Another user, to follow or unfollow
   function followee(c: AppContext) {
@@ -34,7 +34,7 @@ export function profileRoutes(store: Store) {
     return user && user.id !== c.get('user')?.id ? user : undefined
   }
 
-  routes.post('/profile/:username/follow', auth, (c) => {
+  routes.post('/:username/follow', auth, (c) => {
     const user = followee(c)
 
     if (!user) {
@@ -45,7 +45,7 @@ export function profileRoutes(store: Store) {
     return back(c)
   })
 
-  routes.delete('/profile/:username/follow', auth, (c) => {
+  routes.delete('/:username/follow', auth, (c) => {
     const user = followee(c)
 
     if (!user) {
