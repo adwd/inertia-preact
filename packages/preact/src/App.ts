@@ -202,6 +202,7 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
       this.forceUpdate()
     }
 
+    // An arrow function, for `this`
     const syncServerHead = (event: { detail: { page: Page } }) => {
       this.app.headManager.updateServerHead(resolveServerHead(event.detail.page, this.props.serverHead))
     }
@@ -242,6 +243,7 @@ export default class App extends Component<InertiaAppProps, InertiaAppState> {
     }
 
     return new Promise((resolve) => {
+      // An arrow function, for `this`
       const done = () => {
         this.pendingSwaps.delete(done)
         resolve()

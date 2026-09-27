@@ -4,7 +4,7 @@ import ErrorMessages from '../../components/ErrorMessages.tsx'
 export default function Register() {
   const form = useForm({ username: '', email: '', password: '' })
 
-  const submit = (event: SubmitEvent) => {
+  function submit(event: SubmitEvent) {
     event.preventDefault()
     form.post('/register', { onError: () => form.reset('password') })
   }

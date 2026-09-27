@@ -4,10 +4,13 @@ import { InertiaFormStore } from '../src/useForm'
 
 type UserForm = { name: string; address: { city: string }; tags: string[] }
 
-const createStore = (data: UserForm | (() => UserForm) = { name: 'Jane', address: { city: 'Tokyo' }, tags: [] }) =>
-  new InertiaFormStore<UserForm>({ data })
+function createStore(data: UserForm | (() => UserForm) = { name: 'Jane', address: { city: 'Tokyo' }, tags: [] }) {
+  return new InertiaFormStore<UserForm>({ data })
+}
 
-const tick = () => new Promise<void>((resolve) => queueMicrotask(resolve))
+function tick() {
+  return new Promise<void>((resolve) => queueMicrotask(resolve))
+}
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -153,7 +156,7 @@ describe('snapshots and subscriptions', () => {
 })
 
 describe('submitting', () => {
-  const captureVisit = () => {
+  function captureVisit() {
     const visits: Array<{ url: string; data: unknown; options: VisitOptions }> = []
 
     for (const method of ['get', 'post', 'put', 'patch'] as const) {
@@ -238,7 +241,9 @@ describe('submitting', () => {
     const visits = captureVisit()
     const store = createStore()
     const cancel = vi.fn()
-    const optimistic = () => ({})
+    function optimistic() {
+      return {}
+    }
 
     store.getSnapshot().optimistic(optimistic).post('/users')
     visits[0].options.onCancelToken!({ cancel })

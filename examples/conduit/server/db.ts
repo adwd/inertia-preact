@@ -97,17 +97,21 @@ export interface ArticleInput {
 type Row = Record<string, unknown>
 
 // The columns of a profile, as seen by the viewer (`$viewer`, null for guests)
-const profileColumns = (user: string) => `
-  ${user}.username AS username, ${user}.bio AS bio, ${user}.image AS image,
-  EXISTS (SELECT 1 FROM follows WHERE follower_id = $viewer AND followee_id = ${user}.id) AS following
-`
+function profileColumns(user: string) {
+  return `
+    ${user}.username AS username, ${user}.bio AS bio, ${user}.image AS image,
+    EXISTS (SELECT 1 FROM follows WHERE follower_id = $viewer AND followee_id = ${user}.id) AS following
+  `
+}
 
-const toProfile = (row: Row): Profile => ({
-  username: row.username as string,
-  bio: row.bio as string | null,
-  image: row.image as string | null,
-  following: row.following === 1,
-})
+function toProfile(row: Row): Profile {
+  return {
+    username: row.username as string,
+    bio: row.bio as string | null,
+    image: row.image as string | null,
+    following: row.following === 1,
+  }
+}
 
 export function slugify(title: string) {
   const slug = title

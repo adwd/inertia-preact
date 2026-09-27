@@ -202,7 +202,7 @@ test("follows an author, whose articles then make up the user's feed", async ({ 
 test('filters by tag and paginates, reloading the articles only', async ({ page }) => {
   // Other tests add tags: compare with the tags shown before each visit
   const tags = page.locator('.sidebar .tag-pill')
-  const shownTags = async () => {
+  async function shownTags() {
     await expect(tags.first()).toBeVisible()
     return tags.allTextContents()
   }

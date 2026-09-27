@@ -4,11 +4,13 @@ import { HttpFormStore } from '../src/useHttp'
 
 type Form = { name: string; avatar?: File | null }
 
-const respond = (status: number, body: unknown = null): HttpResponse => ({
-  status,
-  data: body === null ? '' : JSON.stringify(body),
-  headers: {},
-})
+function respond(status: number, body: unknown = null): HttpResponse {
+  return {
+    status,
+    data: body === null ? '' : JSON.stringify(body),
+    headers: {},
+  }
+}
 
 function fakeClient(handler: (config: HttpRequestConfig) => HttpResponse | Promise<HttpResponse>) {
   const requests: HttpRequestConfig[] = []
@@ -23,7 +25,9 @@ function fakeClient(handler: (config: HttpRequestConfig) => HttpResponse | Promi
   return requests
 }
 
-const createStore = () => new HttpFormStore<Form, { id: number }>({ data: { name: 'Jane' } })
+function createStore() {
+  return new HttpFormStore<Form, { id: number }>({ data: { name: 'Jane' } })
+}
 
 afterEach(() => vi.useRealTimers())
 

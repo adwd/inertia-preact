@@ -2,16 +2,17 @@ import type { Page } from '@inertiajs/core'
 import type { ComponentChildren } from 'preact'
 import { renderToString } from 'preact-render-to-string'
 import { describe, expect, test } from 'vitest'
-import { createInertiaApp, Head, type PageComponent, usePage } from '../src'
+import { createInertiaApp, Head, usePage } from '../src'
 
-const page = (component: string, props: Record<string, unknown> = {}): Page =>
-  ({ component, props, url: '/test', version: null }) as unknown as Page
+function page(component: string, props: Record<string, unknown> = {}): Page {
+  return { component, props, url: '/test', version: null } as unknown as Page
+}
 
-const Layout = ({ children, title }: { children?: ComponentChildren; title?: string }) => (
-  <main data-title={title}>{children}</main>
-)
+function Layout({ children, title }: { children?: ComponentChildren; title?: string }) {
+  return <main data-title={title}>{children}</main>
+}
 
-const Greeting: PageComponent = ({ name }: { name: string }) => {
+function Greeting({ name }: { name: string }) {
   const { component } = usePage()
 
   return (
@@ -44,7 +45,9 @@ describe('server-side rendering', () => {
   })
 
   test('wraps the page in its layouts, with layout props', async () => {
-    const WithLayout: PageComponent = () => <p>Content</p>
+    function WithLayout() {
+      return <p>Content</p>
+    }
     WithLayout.layout = [Layout, { title: 'Nested' }]
 
     const { body } = await createInertiaApp({
@@ -57,7 +60,9 @@ describe('server-side rendering', () => {
   })
 
   test('uses the default layout, and a layout callback for its props', async () => {
-    const WithCallback: PageComponent = () => <p>Content</p>
+    function WithCallback() {
+      return <p>Content</p>
+    }
     WithCallback.layout = (props: { heading: string }) => ({ title: props.heading })
 
     const { body } = await createInertiaApp({
@@ -71,7 +76,9 @@ describe('server-side rendering', () => {
   })
 
   test('supports render function layouts', async () => {
-    const WithRenderFunction: PageComponent = () => <p>Content</p>
+    function WithRenderFunction() {
+      return <p>Content</p>
+    }
     WithRenderFunction.layout = (page: ComponentChildren) => <Layout title="Rendered">{page}</Layout>
 
     const { body } = await createInertiaApp({

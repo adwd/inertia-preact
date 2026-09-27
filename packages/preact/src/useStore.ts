@@ -17,7 +17,9 @@ export function useStore<TSnapshot>(create: () => Store<TSnapshot>): TSnapshot {
   const renderedVersion = store.version
 
   useEffect(() => {
-    const rerender = () => setRenderCount((count) => count + 1)
+    function rerender() {
+      setRenderCount((count) => count + 1)
+    }
     const unsubscribe = store.subscribe(rerender)
 
     // The store may have changed between rendering and subscribing

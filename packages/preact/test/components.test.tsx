@@ -22,7 +22,9 @@ afterEach(() => {
   container.remove()
 })
 
-const flush = () => act(async () => await Promise.resolve())
+function flush() {
+  return act(async () => await Promise.resolve())
+}
 
 describe('<Form>', () => {
   test('exposes its state and methods on the instance, through a ref', () => {
@@ -60,7 +62,9 @@ describe('<Form>', () => {
   })
 
   test('passes the form to a children function and to useFormContext()', async () => {
-    const Errors = () => <p id="context">{useFormContext()?.errors.name}</p>
+    function Errors() {
+      return <p id="context">{useFormContext()?.errors.name}</p>
+    }
     const form = createRef<Form>()
 
     mount(
@@ -86,7 +90,7 @@ describe('useForm()', () => {
   test('re-renders on changes and keeps returning the same object while nothing changes', async () => {
     const forms: Array<InertiaForm<{ name: string }>> = []
 
-    const Component = () => {
+    function Component() {
       const form = useForm({ name: 'Jane' })
       forms.push(form)
 
@@ -108,7 +112,9 @@ describe('useForm()', () => {
 })
 
 describe('<WhenMounted>', () => {
-  const app = (hydrated: boolean) => ({ hydrated }) as AppState
+  function app(hydrated: boolean) {
+    return { hydrated } as AppState
+  }
 
   const content = (
     <WhenMounted fallback={<p>Fallback</p>}>
@@ -131,7 +137,7 @@ describe('<WhenMounted>', () => {
   test('hydrates the fallback, then renders the children', () => {
     let fallbackRenders = 0
 
-    const Fallback = () => {
+    function Fallback() {
       fallbackRenders++
       return <p>Fallback</p>
     }
@@ -178,9 +184,9 @@ describe('<Link>', () => {
   })
 
   test('renders the given element or component', () => {
-    const Custom = (props: { href?: string; children?: preact.ComponentChildren }) => (
-      <span data-href={props.href}>{props.children}</span>
-    )
+    function Custom(props: { href?: string; children?: preact.ComponentChildren }) {
+      return <span data-href={props.href}>{props.children}</span>
+    }
 
     mount(
       <>

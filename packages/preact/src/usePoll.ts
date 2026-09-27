@@ -19,7 +19,7 @@ export default function usePoll(
 
   useEffect(() => {
     // Each reload uses the latest request options
-    const getRequestOptions = () => {
+    function getRequestOptions() {
       const current = latestRequestOptions.current
 
       return typeof current === 'function' ? current() : current

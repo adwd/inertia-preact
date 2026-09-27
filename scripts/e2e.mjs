@@ -137,11 +137,12 @@ function replaceReactWithPreact() {
     rmSync(join(checkout, path), { recursive: true, force: true })
   }
 
-  const copy = (from, to) =>
+  function copy(from, to) {
     cpSync(join(root, from), join(checkout, to), {
       recursive: true,
       filter: (source) => !/(^|[\\/])(node_modules|dist|types)$/.test(relative(root, source)),
     })
+  }
 
   copy('packages/preact', 'packages/preact')
   copy('test-app', 'packages/react/test-app')
@@ -238,8 +239,11 @@ if (ssr) {
 
 // `--project=<name>` rather than `--project <name>`, which would also take the spec paths that follow
 const projectArgs = args.some((arg) => arg.startsWith('--project')) ? [] : [`--project=${browser}`]
-const escape = (title) => title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const skipArgs = [`--grep-invert=${NOT_APPLICABLE.map((title) => `${escape(title)}$`).join('|')}`]
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+const skipArgs = [`--grep-invert=${NOT_APPLICABLE.map((title) => `${escapeRegExp(title)}$`).join('|')}`]
 const debugArgs = debug ? [`--config=${writeDebugConfig()}`] : []
 
 // With --debug, Chromium writes the console to its log output, which Playwright passes on with DEBUG=pw:browser

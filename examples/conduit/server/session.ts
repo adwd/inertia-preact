@@ -76,8 +76,8 @@ export class Session {
   }
 }
 
-export const sessions = (store: Store) =>
-  createMiddleware<Env>(async (c, next) => {
+export function sessions(store: Store) {
+  return createMiddleware<Env>(async (c, next) => {
     const id = getCookie(c, COOKIE)
     const row = id ? store.session(id) : undefined
     let flash: Flash = {}
@@ -92,3 +92,4 @@ export const sessions = (store: Store) =>
 
     await next()
   })
+}

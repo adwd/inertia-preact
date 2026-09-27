@@ -31,8 +31,8 @@ async function render(page: PageObject) {
   }
 }
 
-export const inertiaPages = (assets: Assets) =>
-  inertia<Env>()({
+export function inertiaPages(assets: Assets) {
+  return inertia<Env>()({
     version: assets.version,
     share: (c): SharedProps => {
       const user = c.get('user')
@@ -62,3 +62,4 @@ export const inertiaPages = (assets: Assets) =>
 </html>`
     },
   })
+}

@@ -33,7 +33,7 @@ const renderPromise = ${configureCall}
 // Logged here so it never goes unhandled, and reported again per render by the SSR server
 renderPromise.catch((error) => console.error(error))
 
-const renderPage = async (page) => {
+async function renderPage(page) {
   const render = await renderPromise
 
   return render(page, renderToString)

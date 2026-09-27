@@ -12,14 +12,20 @@ export async function formInput(c: Context): Promise<Record<string, unknown>> {
   return c.req.parseBody({ all: true })
 }
 
-export const text = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
+export function text(value: unknown) {
+  return typeof value === 'string' ? value.trim() : ''
+}
 
-export const textList = (value: unknown) =>
-  (Array.isArray(value) ? value : value === undefined ? [] : [value]).map(text).filter((item) => item !== '')
+export function textList(value: unknown) {
+  const values = Array.isArray(value) ? value : value === undefined ? [] : [value]
+  return values.map(text).filter((item) => item !== '')
+}
 
-export const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+export function isEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
 
-export const isHttpUrl = (value: string) => {
+export function isHttpUrl(value: string) {
   try {
     return ['http:', 'https:'].includes(new URL(value).protocol)
   } catch {

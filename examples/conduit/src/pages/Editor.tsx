@@ -16,7 +16,7 @@ export default function Editor({ article }: Props) {
   })
   const [tag, setTag] = useState('')
 
-  const addTag = () => {
+  function addTag() {
     const name = tag.trim()
 
     if (name && !form.data.tagList.includes(name)) {
@@ -26,13 +26,14 @@ export default function Editor({ article }: Props) {
     setTag('')
   }
 
-  const removeTag = (name: string) =>
+  function removeTag(name: string) {
     form.setData(
       'tagList',
       form.data.tagList.filter((candidate) => candidate !== name),
     )
+  }
 
-  const submit = (event: SubmitEvent) => {
+  function submit(event: SubmitEvent) {
     event.preventDefault()
 
     if (article) {

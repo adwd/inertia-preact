@@ -33,9 +33,11 @@ function withErrors(c: AppContext, errors: Errors) {
   return back(c)
 }
 
-const hasErrors = (errors: Errors) => Object.keys(errors).length > 0
+function hasErrors(errors: Errors) {
+  return Object.keys(errors).length > 0
+}
 
-const pageNumber = (c: AppContext) => {
+function pageNumber(c: AppContext) {
   const page = Number.parseInt(c.req.query('page') ?? '1', 10)
   return Number.isSafeInteger(page) && page > 0 ? page : 1
 }
@@ -76,23 +78,26 @@ export function createApp({ store, assets }: AppOptions) {
   app.use(sessions(store))
   app.use(inertiaPages(assets))
 
-  const viewerId = (c: AppContext) => c.get('user')?.id ?? null
+  function viewerId(c: AppContext) {
+    return c.get('user')?.id ?? null
+  }
 
-  const notFound = (c: AppContext) => {
+  function notFound(c: AppContext) {
     c.status(404)
     return c.render('Error', { status: 404 })
   }
 
   // Home: the global feed, the feed of followed authors, or the articles with a tag
 
-  const home = (c: AppContext, tab: FeedTab, filter: ArticleFilter) =>
-    c.render('Home', {
+  function home(c: AppContext, tab: FeedTab, filter: ArticleFilter) {
+    return c.render('Home', {
       tab,
       articles: store.articles(filter, pageNumber(c), viewerId(c)),
       // Loaded after the page is shown: it doesn't change with the tab or the page, and is kept by the visits
       // reloading only the articles
       tags: defer(() => store.popularTags()),
     })
+  }
 
   app.get('/', (c) => {
     if (c.req.query('feed') === 'following') {
@@ -216,7 +221,7 @@ export function createApp({ store, assets }: AppOptions) {
 
   // Editor
 
-  const articleInput = async (c: AppContext): Promise<[ArticleInput, Errors]> => {
+  async function articleInput(c: AppContext): Promise<[ArticleInput, Errors]> {
     const input = await formInput(c)
     const article = {
       title: text(input.title),
@@ -252,7 +257,7 @@ export function createApp({ store, assets }: AppOptions) {
   })
 
   // Only the author may edit an article
-  const ownArticle = (c: AppContext) => {
+  function ownArticle(c: AppContext) {
     const article = store.articleRow(c.req.param('slug')!)
     return article && article.author_id === c.get('user')?.id ? article : undefined
   }
@@ -379,7 +384,7 @@ export function createApp({ store, assets }: AppOptions) {
 
   // Profiles
 
-  const profile = (c: AppContext, tab: 'articles' | 'favorites') => {
+  function profile(c: AppContext, tab: 'articles' | 'favorites') {
     const username = c.req.param('username')!
     const found = store.profile(username, viewerId(c))
 
@@ -400,7 +405,7 @@ export function createApp({ store, assets }: AppOptions) {
   app.get('/profile/:username', (c) => profile(c, 'articles'))
   app.get('/profile/:username/favorites', (c) => profile(c, 'favorites'))
 
-  const followee = (c: AppContext) => {
+  function followee(c: AppContext) {
     const user = store.userByUsername(c.req.param('username')!)
     return user && user.id !== c.get('user')?.id ? user : undefined
   }

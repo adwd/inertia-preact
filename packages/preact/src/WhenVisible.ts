@@ -99,7 +99,9 @@ export default function WhenVisible({
     return () => observer.disconnect()
   }, [loaded, always, buffer])
 
-  const content = () => (typeof children === 'function' ? children({ fetching }) : children)
+  function content() {
+    return typeof children === 'function' ? children({ fetching }) : children
+  }
 
   if (loaded && !always) {
     return content()

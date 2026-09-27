@@ -27,7 +27,7 @@ export type LinkProps = LinkComponentBaseProps & {
   onClick?: (event: TargetedMouseEvent<HTMLElement>) => void
 } & Omit<AllHTMLAttributes<HTMLElement>, keyof LinkComponentBaseProps | 'as' | 'onClick' | 'ref'>
 
-const noop = () => {}
+function noop() {}
 
 function prefetchModesOf(prefetch: LinkComponentBaseProps['prefetch']): LinkPrefetchOption[] {
   if (prefetch === true) {
@@ -112,7 +112,7 @@ export default function Link({
     pageProps,
   }
 
-  const visit = () =>
+  function visit() {
     router.visit(url, {
       ...baseOptions,
       viewTransition,
@@ -134,6 +134,7 @@ export default function Link({
       onNetworkError,
       onFlash,
     })
+  }
 
   const prefetchModes = prefetchModesOf(prefetch)
 
@@ -145,8 +146,9 @@ export default function Link({
           0
         : config.get('prefetch.cacheFor')
 
-  const doPrefetch = () =>
+  function doPrefetch() {
     router.prefetch(url, { ...baseOptions, onPrefetching, onPrefetched }, { cacheFor: cacheForValue, cacheTags })
+  }
 
   // Latest prefetch function for the mount prefetch, which runs once
   const prefetchRef = useRef(doPrefetch)
@@ -160,7 +162,7 @@ export default function Link({
     return () => clearTimeout(hoverTimeout.current)
   }, [])
 
-  const handleClick = (event: TargetedMouseEvent<HTMLElement>) => {
+  function handleClick(event: TargetedMouseEvent<HTMLElement>) {
     onClick(event)
 
     if (shouldIntercept(event)) {

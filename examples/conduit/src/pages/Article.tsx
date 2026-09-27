@@ -11,7 +11,7 @@ interface Props {
 }
 
 function ArticleMeta({ article }: { article: ArticleData }) {
-  const remove = () => {
+  function remove() {
     if (confirm('Delete this article?')) {
       router.delete(articleUrl(article.slug))
     }
@@ -58,13 +58,14 @@ function Comments({ article, comments }: Props) {
   const form = useForm({ body: '' })
   const commentsUrl = `${articleUrl(article.slug)}/comments`
 
-  const submit = (event: SubmitEvent) => {
+  function submit(event: SubmitEvent) {
     event.preventDefault()
     form.post(commentsUrl, { preserveScroll: true, only: ['comments', 'errors'], onSuccess: () => form.reset() })
   }
 
-  const remove = (comment: Comment) =>
+  function remove(comment: Comment) {
     router.delete(`${commentsUrl}/${comment.id}`, { preserveScroll: true, preserveState: true, only: ['comments'] })
+  }
 
   return (
     <div class="row">

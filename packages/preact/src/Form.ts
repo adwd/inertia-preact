@@ -40,7 +40,7 @@ export type FormProps<TForm extends object = Record<string, any>> = FormComponen
 
 type Submitter = HTMLElement | null | undefined
 
-const noop = () => {}
+function noop() {}
 
 const FormContext = createContext<FormComponentRef | undefined>(undefined)
 FormContext.displayName = 'InertiaForm'

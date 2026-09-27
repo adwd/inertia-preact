@@ -118,14 +118,14 @@ export default async function createInertiaApp<SharedProps extends PageProps = P
 
   const isServer = typeof window === 'undefined'
 
-  const resolveComponent = async (name: string, page?: Page): Promise<PageComponent> => {
+  async function resolveComponent(name: string, page?: Page): Promise<PageComponent> {
     const module = await resolve!(name, page)
 
     return (module as { default?: PageComponent }).default ?? (module as PageComponent)
   }
 
-  const appProps = (initialPage: Page<SharedProps>, initialComponent: PageComponent, serverRendered: boolean) =>
-    ({
+  function appProps(initialPage: Page<SharedProps>, initialComponent: PageComponent, serverRendered: boolean) {
+    return {
       initialPage,
       initialComponent,
       resolveComponent,
@@ -133,9 +133,10 @@ export default async function createInertiaApp<SharedProps extends PageProps = P
       defaultLayout: layout,
       serverHead,
       serverRendered,
-    }) satisfies InertiaAppProps<SharedProps>
+    } satisfies InertiaAppProps<SharedProps>
+  }
 
-  const renderOnServer = async (page: Page<SharedProps>, renderToString: RenderToString) => {
+  async function renderOnServer(page: Page<SharedProps>, renderToString: RenderToString) {
     let head: string[] = []
 
     const props: InertiaAppProps<SharedProps> = {

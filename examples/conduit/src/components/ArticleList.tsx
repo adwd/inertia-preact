@@ -35,7 +35,7 @@ function Pagination({ currentPage, lastPage, url }: { currentPage: number; lastP
     return null
   }
 
-  const pageUrl = (page: number) => {
+  function pageUrl(page: number) {
     const [path, query = ''] = url.split('?')
     const params = new URLSearchParams(query)
     params.set('page', String(page))

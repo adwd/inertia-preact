@@ -13,7 +13,7 @@ export default function Settings() {
     password: '',
   })
 
-  const submit = (event: SubmitEvent) => {
+  function submit(event: SubmitEvent) {
     event.preventDefault()
     form.put('/settings', { onFinish: () => form.reset('password') })
   }

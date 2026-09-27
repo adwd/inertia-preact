@@ -21,7 +21,9 @@ export default function usePrefetch(options: VisitOptions = {}): {
   })
 
   useEffect(() => {
-    const isCurrentPage = (url: URL) => url.pathname === window.location.pathname
+    function isCurrentPage(url: URL) {
+      return url.pathname === window.location.pathname
+    }
 
     const removePrefetchingListener = router.on('prefetching', ({ detail }) => {
       if (isCurrentPage(detail.visit.url)) {

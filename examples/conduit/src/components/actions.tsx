@@ -27,8 +27,9 @@ function updateArticles(props: Props, update: (article: ArticlePreview) => Artic
   return changes
 }
 
-const withFollowing = (author: Profile, username: string, following: boolean) =>
-  author.username === username ? { ...author, following } : author
+function withFollowing(author: Profile, username: string, following: boolean) {
+  return author.username === username ? { ...author, following } : author
+}
 
 function useSignedIn() {
   return usePage().props.auth.user !== null
@@ -38,7 +39,7 @@ export function FavoriteButton({ article, compact = false }: { article: ArticleP
   const signedIn = useSignedIn()
   const { slug, favorited, favoritesCount } = article
 
-  const toggle = () => {
+  function toggle() {
     const favorite = !favorited
 
     router.visit(`/article/${encodeURIComponent(slug)}/favorite`, {
@@ -83,7 +84,7 @@ export function FollowButton({ profile, class: extraClass = '' }: { profile: Pro
   const signedIn = useSignedIn()
   const { username, following } = profile
 
-  const toggle = () => {
+  function toggle() {
     const follow = !following
 
     router.visit(`/profile/${encodeURIComponent(username)}/follow`, {

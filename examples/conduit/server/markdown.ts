@@ -1,10 +1,16 @@
 import { Marked, type Tokens } from 'marked'
 
-const escapeHtml = (text: string) =>
-  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
 
 // Relative URLs, and absolute ones with these protocols only (no `javascript:` links)
-const isSafeUrl = (url: string) => {
+function isSafeUrl(url: string) {
   const protocol = /^([a-z][a-z0-9+.-]*):/i.exec(url.trim())?.[1]?.toLowerCase()
   return protocol === undefined || ['http', 'https', 'mailto'].includes(protocol)
 }

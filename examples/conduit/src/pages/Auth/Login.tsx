@@ -4,7 +4,7 @@ import ErrorMessages from '../../components/ErrorMessages.tsx'
 export default function Login() {
   const form = useForm({ email: '', password: '' })
 
-  const submit = (event: SubmitEvent) => {
+  function submit(event: SubmitEvent) {
     event.preventDefault()
     form.post('/login', { onError: () => form.reset('password') })
   }

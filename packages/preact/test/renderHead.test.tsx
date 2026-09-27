@@ -86,7 +86,9 @@ describe('renderHeadElements', () => {
   })
 
   test('flattens fragments and arrays, and ignores text, empty values and components', () => {
-    const Component = () => <meta name="ignored" />
+    function Component() {
+      return <meta name="ignored" />
+    }
     const show = false
 
     expect(

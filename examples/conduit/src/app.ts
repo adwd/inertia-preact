@@ -15,7 +15,11 @@ export async function resolve(name: string) {
   return page()
 }
 
-export const title = (title: string) => (title ? `${title} — Conduit` : 'Conduit')
+export function title(title: string) {
+  return title ? `${title} — Conduit` : 'Conduit'
+}
 
 /** Every page has the layout, which persists across visits */
-export const layout = () => Layout
+export function layout() {
+  return Layout
+}
